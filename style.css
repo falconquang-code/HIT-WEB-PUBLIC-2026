@@ -1,0 +1,95 @@
+p {
+    color: rgb(245, 243, 243);
+}
+*{
+    margin: 1px;;
+    padding:2px;
+    box-sizing:border-box;
+}
+body{
+    background-color: rgb(255, 255, 255);
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center;
+}
+.card{
+    width: 330px;
+    background-color: black;
+    border: 3px;
+    border-radius:15px;
+    margin:50px auto;
+    padding:20px;
+}
+.avatar{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:5px solid rgb(247, 7, 7);
+    margin-bottom:20px;
+}
+h1{
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    margin: 15px;
+}
+.role{
+    font-style:italic;
+    color:rgb(247, 245, 245);
+    margin-bottom:20px;
+    font-size: 1.1rem;
+}
+
+.info{
+    text-align:center;
+    margin-bottom:20px;
+    margin:10px 0;
+    font-size:1.1em;
+}
+
+.skill{
+    display:inline-block;
+    background-color:#3498db;
+    color:white;
+    padding:8px 12px;
+    border-radius:20px;
+    margin:20px;
+}
+
+.button{
+    margin-top:20px;
+}
+
+.btn{
+    display:inline-block;
+    width:120px;
+    padding:10px;
+    margin:20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.follow{
+    background-color:rgb(12, 12, 221);
+    color:white;
+    border:2px solid #2196f3;
+}
+.like{
+    background-color:white;
+    color:rgb(117, 117, 229);
+    border:2px solid #2196f3;
+}
+hr{
+    border: none;
+    color: azure;
+    border-top: 1px solid #f8f7f7;
+    margin:10px auto;
+}
+.arrange{
+    display: flex; /* Bật chế độ Flexbox để ép thẻ nằm ngang */
+    justify-content: center; /* Đẩy cụm 4 thẻ vào chính giữa màn hình */
+    align-items: stretch; /* Đảm bảo các thẻ có chiều cao bằng nhau nếu nội dung dài ngắn khác nhau */
+    gap: 10px; /* Tạo khoảng trống 30px giữa các card */
+    flex-wrap: wrap; /* Nếu màn hình nhỏ không chứa đủ, nó sẽ tự đẩy card xuống dòng */
+    padding: 20px;
+}
