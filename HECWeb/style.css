@@ -1,0 +1,188 @@
+/* Thiết lập font và biến màu sắc */
+:root {
+    --primary-red: #ef3340; /* Màu đỏ lấy từ logo HEC */
+    --dark-bg: #0a0505;
+    --text-white: #ffffff;
+    --text-gray: #a0a0a0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Tạo hiệu ứng sọc lưới giống background trong ảnh mẫu */
+    background-image: 
+        linear-gradient(rgba(239, 51, 64, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(239, 51, 64, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    position: relative;
+}
+
+/* Các đốm sáng ảo diệu đằng sau (Glow) */
+.glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: rgba(239, 51, 64, 0.15);
+    filter: blur(120px);
+    border-radius: 50%;
+    z-index: -1;
+}
+.glow-1 { top: -100px; left: -150px; }
+.glow-2 { bottom: 0; right: -100px; }
+
+/* ---------------- HEADER / NAVBAR ---------------- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: rgba(10, 5, 5, 0.6);
+    backdrop-filter: blur(15px); /* Làm mờ nền sau menu giống kính */
+    border-bottom: 1px solid rgba(239, 51, 64, 0.2);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.logo img {
+    height: 60px; /* Chỉnh độ to nhỏ của Logo */
+    filter: drop-shadow(0 0 10px rgba(239, 51, 64, 0.5)); /* Phát sáng nhẹ cho logo */
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-red);
+}
+
+.btn-outline {
+    border: 1px solid var(--primary-red);
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: var(--primary-red) !important;
+}
+
+.btn-outline:hover {
+    background: var(--primary-red);
+    color: var(--text-white) !important;
+    box-shadow: 0 0 15px rgba(239, 51, 64, 0.4);
+}
+
+/* ---------------- HERO SECTION ---------------- */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 150px 8% 80px 8%; /* Đẩy xuống 1 chút để không bị che bởi navbar */
+    min-height: 100vh;
+    gap: 50px;
+}
+
+/* Phần chữ bên trái */
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.hero-content .highlight {
+    color: var(--primary-red);
+    text-shadow: 0 0 20px rgba(239, 51, 64, 0.4); /* Hiệu ứng phát sáng chữ đỏ */
+    margin-bottom: 5px;
+}
+
+.hero-content h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.hero-content p {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #ef3340, #c81d28);
+    color: var(--text-white);
+    padding: 15px 35px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 25px rgba(239, 51, 64, 0.4);
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(239, 51, 64, 0.6);
+}
+
+.arrow {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Phần ảnh bên phải */
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.image-wrapper {
+    position: relative;
+    border-radius: 35px; /* Bo góc to giống ảnh mẫu */
+    padding: 10px;
+    background: linear-gradient(135deg, rgba(239,51,64,0.5), rgba(0,0,0,0));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.image-wrapper img {
+    width: 100%;
+    max-width: 600px; /* Khống chế độ rộng ảnh */
+    height: auto;
+    border-radius: 25px;
+    display: block;
+    border: 2px solid rgba(239, 51, 64, 0.2);
+}
