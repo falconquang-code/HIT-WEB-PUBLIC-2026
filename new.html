@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Thật hay Thách? 🔥</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#FF3E9D;
+    --purple:#7B2FF7;
+    --indigo:#1B0E3D;
+    --yellow:#FFD23F;
+    --mint:#2BE0C8;
+    --card-truth:#2C1B5E;
+    --card-dare:#5E1B3B;
+    --ink:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    height:100%;
+    font-family:'Be Vietnam Pro', sans-serif;
+    color:var(--ink);
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,62,157,0.55), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(43,224,200,0.35), transparent 40%),
+      radial-gradient(circle at 75% 85%, rgba(123,47,247,0.55), transparent 50%),
+      linear-gradient(160deg, #1B0E3D 0%, #2C1257 45%, #3A0F63 100%);
+    background-attachment:fixed;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:relative;
+  }
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(60px);
+    opacity:0.45;
+    z-index:0;
+    pointer-events:none;
+    animation:float 14s ease-in-out infinite;
+  }
+  .blob1{width:280px;height:280px;background:var(--pink);top:-60px;left:-60px;}
+  .blob2{width:320px;height:320px;background:var(--mint);bottom:-80px;right:-60px;animation-delay:-4s;}
+  .blob3{width:220px;height:220px;background:var(--yellow);top:40%;right:-40px;animation-delay:-8s;opacity:0.25;}
+  @keyframes float{
+    0%,100%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-25px) translateX(15px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .blob{animation:none;}
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:480px;
+    padding:28px 20px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .logo{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:2.3rem;
+    line-height:1.05;
+    margin:0;
+    letter-spacing:0.5px;
+  }
+  .logo span.dot{color:var(--yellow);}
+  .logo .grad{
+    background:linear-gradient(90deg, var(--pink), var(--mint));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .tagline{
+    margin:6px 0 0;
+    font-size:0.95rem;
+    opacity:0.75;
+    font-weight:500;
+  }
+
+  /* Mode selector */
+  .mode-select{
+    display:flex;
+    gap:10px;
+    width:100%;
+    margin-bottom:20px;
+  }
+  .mode-btn{
+    flex:1;
+    border:2px solid rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.06);
+    color:var(--ink);
+    padding:13px 8px;
+    border-radius:16px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.02rem;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    text-align:center;
+  }
+  .mode-btn:active{transform:scale(0.96);}
+  .mode-btn.truth.active{
+    background:linear-gradient(135deg, #6C5CE7, #7B2FF7);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(123,47,247,0.45);
+  }
+  .mode-btn.dare.active{
+    background:linear-gradient(135deg, #FF3E9D, #FF7A59);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(255,62,157,0.45);
+  }
+  .mode-btn.random.active{
+    background:linear-gradient(135deg, #2BE0C8, #3AB0FF);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(43,224,200,0.4);
+  }
+
+  /* Card area */
+  .stage{
+    width:100%;
+    aspect-ratio:3/4;
+    max-height:56vh;
+    perspective:1400px;
+    margin-bottom:22px;
+  }
+  .card{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.2,.9,.25,1.1);
+    cursor:pointer;
+  }
+  .card.flipped{transform:rotateY(180deg);}
+  .card.shake{animation:shake .4s ease;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0) rotateY(var(--ry,0));}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .face{
+    position:absolute;
+    inset:0;
+    border-radius:26px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 20px 45px rgba(0,0,0,0.35);
+  }
+  .face-front{
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12), transparent 60%),
+      linear-gradient(150deg, #3A2178, #1B0E3D 70%);
+    border:2px solid rgba(255,255,255,0.14);
+  }
+  .face-front .big-mark{
+    font-family:'Baloo 2', sans-serif;
+    font-size:5rem;
+    font-weight:800;
+    background:linear-gradient(90deg, var(--pink), var(--yellow), var(--mint));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin:0;
+  }
+  .face-front .hint{
+    margin-top:10px;
+    font-size:0.95rem;
+    opacity:0.7;
+    font-weight:500;
+  }
+  .face-back{
+    transform:rotateY(180deg);
+    justify-content:space-between;
+  }
+  .face-back.truth-bg{
+    background:linear-gradient(155deg, #4A2E9E, #2C1B5E 75%);
+    border:2px solid rgba(255,255,255,0.16);
+  }
+  .face-back.dare-bg{
+    background:linear-gradient(155deg, #B0206E, #5E1B3B 75%);
+    border:2px solid rgba(255,255,255,0.16);
+  }
+  .card-kind{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+    padding:6px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.16);
+    margin-top:4px;
+  }
+  .card-text{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:600;
+    font-size:1.5rem;
+    line-height:1.35;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 4px;
+  }
+  .card-number{
+    font-size:0.8rem;
+    opacity:0.6;
+    margin-bottom:2px;
+    font-weight:500;
+  }
+
+  /* Controls */
+  .controls{
+    display:flex;
+    gap:14px;
+    width:100%;
+  }
+  .btn{
+    flex:1;
+    border:none;
+    padding:16px 10px;
+    border-radius:18px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.08rem;
+    cursor:pointer;
+    color:var(--ink);
+    transition:transform .15s ease, filter .2s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .btn:active{transform:scale(0.96);}
+  .btn-flip{
+    background:linear-gradient(135deg, var(--yellow), #FF9A3D);
+    color:#2A1200;
+    box-shadow:0 10px 26px rgba(255,157,61,0.35);
+    flex:1.4;
+  }
+  .btn-skip{
+    background:rgba(255,255,255,0.08);
+    border:2px solid rgba(255,255,255,0.22);
+  }
+  .btn-skip:hover{background:rgba(255,255,255,0.14);}
+
+  .badge-count{
+    position:absolute;
+    top:14px;
+    right:16px;
+    font-size:0.75rem;
+    background:rgba(0,0,0,0.28);
+    padding:5px 10px;
+    border-radius:999px;
+    font-weight:600;
+    opacity:0.85;
+  }
+
+  @media (max-width:360px){
+    .logo{font-size:1.9rem;}
+    .card-text{font-size:1.28rem;}
+    .face-front .big-mark{font-size:4rem;}
+  }
+</style>
+</head>
+<body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <div class="wrap">
+    <header>
+      <h1 class="logo">Thật <span class="dot">hay</span> <span class="grad">Thách?</span> 🔥</h1>
+      <p class="tagline">Chọn phe, lật thẻ, dám không dám!</p>
+    </header>
+
+    <div class="mode-select" role="group" aria-label="Chọn chế độ">
+      <button class="mode-btn truth active" data-mode="truth">😳 Thật</button>
+      <button class="mode-btn dare" data-mode="dare">🔥 Thách</button>
+      <button class="mode-btn random" data-mode="random">🎲 Ngẫu nhiên</button>
+    </div>
+
+    <div class="stage">
+      <div class="card" id="card">
+        <div class="face face-front" id="faceFront">
+          <span class="badge-count" id="playedCount">Đã chơi: 0</span>
+          <p class="big-mark" id="frontMark">?</p>
+          <p class="hint">Chạm vào thẻ hoặc bấm "Lật thẻ"</p>
+        </div>
+        <div class="face face-back" id="faceBack">
+          <div class="card-number" id="cardNumber">#1</div>
+          <span class="card-kind" id="cardKind">THẬT</span>
+          <div class="card-text" id="cardText">Câu hỏi sẽ hiện ở đây...</div>
+          <div style="height:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-skip" id="skipBtn">⏭️ Bỏ qua</button>
+      <button class="btn btn-flip" id="flipBtn">🎴 Lật thẻ</button>
+    </div>
+
+      </div>
+
+<script>
+const TRUTHS = [
+"Kể chi tiết lần \"quê độn thổ\" nhất đời bạn - lúc đó ai ở đó, chuyện gì xảy ra?",
+"Kể lại lần đầu bạn thích một người - lúc đó bạn \"ngáo\" cỡ nào, làm trò gì ngu ngơ?",
+"Kể một lần bạn bịa chuyện tài đến mức chính bạn cũng suýt tin.",
+"Kể câu chuyện điên rồ nhất bạn từng làm chỉ vì nhất thời \"máu lên não\".",
+"Kể chi tiết lần bạn bị \"bóc phốt\" trước cả lớp/cả nhóm - kết cục ra sao?",
+"Kể một giấc mơ kỳ quặc nhất bạn từng có, càng chi tiết càng tốt.",
+"Kể lại khoảnh khắc bạn nhắn nhầm tin nhắn \"bí mật\" cho sai người - drama diễn ra thế nào?",
+"Kể một lần bạn giả vờ ốm để trốn học/trốn việc - màn kịch chi tiết ra sao?",
+"Kể câu chuyện hài nhất về lần bạn bị \"đá\" hoặc từng \"đá\" ai đó.",
+"Kể chi tiết lần bạn lỡ để lộ bí mật của bạn thân - hậu quả thế nào?",
+"Kể một lần bạn tưởng crush thích mình nhưng hóa ra \"tự sướng\" nhầm.",
+"Kể câu chuyện dở khóc dở cười khi bạn bị camera quay lại khoảnh khắc \"tấu hài\".",
+"Kể chi tiết lần bạn ngã trước mặt đông người - bạn gượng dậy kiểu gì?",
+"Kể một lần bạn \"thả thính\" thất bại thảm hại nhất.",
+"Kể câu chuyện lần bạn chép bài mà suýt bị bắt tại trận.",
+"Kể chi tiết lần bạn nói xấu ai đó rồi bị chính người đó nghe thấy.",
+"Kể một lần trốn nhà/trốn học đi chơi và mọi thứ đi sai kế hoạch thế nào.",
+"Kể câu chuyện điên nhất về lần bạn say xe/say nắng và làm trò kỳ quặc.",
+"Kể chi tiết lần bạn \"cyberstalk\" crush đến mức tự thấy ghê chính mình.",
+"Kể một lần bạn bị bố mẹ bắt quả tang đang làm gì đó \"khó đỡ\".",
+"Kể câu chuyện lần bạn tỏ tình/bị tỏ tình theo cách \"sến\" và \"bựa\" nhất có thể.",
+"Kể chi tiết lần bạn nhầm người lạ thành người quen rồi vẫy tay/ôm chầm.",
+"Kể một lần bạn diễn kịch xin lỗi giả tạo mà suýt \"lộ tẩy\".",
+"Kể câu chuyện bạn từng \"seen\" tin nhắn tỏ tình rồi trốn biệt tăm cả tuần.",
+"Kể chi tiết trận cãi nhau \"nảy lửa\" nhất giữa bạn và người thân.",
+"Kể một lần bạn tưởng mình \"ngầu\" nhưng thực ra trông rất \"phèn\".",
+"Kể câu chuyện lần bạn bị bạn thân troll đau đến mức muốn \"quay xe\" tình bạn.",
+"Kể chi tiết lần bạn lỡ miệng nói ra bí mật động trời giữa đám đông.",
+"Kể một lần món quà bạn tặng ai đó \"tấu hài\" đến mức cả hai cùng cười.",
+"Kể câu chuyện bạn từng giả giọng, giả tên để \"cưa cẩm\" online - kết quả sao?",
+"Kể chi tiết lần bạn khóc nức nở vì một lý do \"trẻ trâu\" mà giờ nghĩ lại thấy buồn cười.",
+"Kể một lần bạn tưởng đang nhắn cho bạn thân nhưng lại gửi nhầm cho \"đối tượng nguy hiểm\".",
+"Kể câu chuyện điên rồ nhất về lần bạn thức trắng đêm vì một chuyện \"không đáng\".",
+"Kể chi tiết lần bạn cố tỏ ra bình thường trước crush nhưng \"lộ\" hết cảm xúc.",
+"Kể một lần bạn nói dối cả nhóm về lý do không đi chơi được - sự thật phũ phàng là gì?",
+"Kể câu chuyện lần bạn bị điểm kém và \"diễn\" màn kịch giấu bố mẹ ra sao.",
+"Kể chi tiết lần bạn tưởng nhìn thấy ma nhưng hóa ra là chuyện gì đó \"vô lý\" cực.",
+"Kể một lần bạn lỡ \"block\" nhầm người quan trọng rồi phải tìm cách \"quay xe\".",
+"Kể câu chuyện bạn bị bắt gặp đang \"tám chuyện\" xấu về ai đó ngay trước mặt họ.",
+"Kể chi tiết lần bạn cosplay/ăn mặc \"thảm họa\" ra đường mà không biết.",
+"Kể một lần crush của bạn làm điều gì đó khiến bạn \"vỡ mộng\" hoàn toàn.",
+"Kể câu chuyện lần đầu bạn hẹn hò - nó \"thảm\" đến mức nào?",
+"Kể chi tiết lần bạn tự tin hát karaoke trước đám đông nhưng \"phá nát\" cả bài.",
+"Kể một lần cả nhóm lừa bạn một vố \"đau tim\" nhất.",
+"Kể câu chuyện lần bạn cố \"sống ảo\" trên story nhưng bị \"bóc phốt\" ngay lập tức.",
+"Kể chi tiết lần bạn tưởng mình sắp nổi tiếng vì 1 video nhưng thực ra chỉ có 3 view (là mẹ bạn xem).",
+"Kể một lần bạn hoảng loạn vì tưởng làm mất điện thoại nhưng nó ở ngay... trên tay.",
+"Kể câu chuyện điên nhất về lần bạn \"trả thù vặt\" ai đó theo kiểu bựa nhất có thể.",
+"Kể chi tiết lần bạn tưởng đang \"thả thính\" cực mượt nhưng đối phương chẳng hiểu gì.",
+"Kể một lần bạn ăn nói \"lố\" trước mặt phụ huynh người yêu/crush.",
+"Kể câu chuyện lần bạn từng \"gánh còng lưng\" vì tin lời bạn bè rủ làm trò dại.",
+"Kể chi tiết lần group chat lớp \"nổ\" vì 1 tin đồn nhảm về bạn.",
+"Kể một lần bạn tưởng mình đang \"flex\" nhưng cả nhóm chỉ thấy \"phèn\".",
+"Kể câu chuyện lần bạn nhắn tin cho \"crush\" nhưng gõ sai chính tả xấu hổ không tưởng.",
+"Kể chi tiết lần bạn từng trốn trong tủ/toilet để né một cuộc gặp không mong muốn.",
+"Kể một lần cả lớp cùng bịa lý do \"vĩ đại\" để trốn kiểm tra.",
+"Kể câu chuyện điên rồ nhất khi đi chơi với hội bạn và mọi chuyện đi quá xa kế hoạch.",
+"Kể chi tiết lần bạn tưởng nhắn riêng nhưng lại \"trả lời tất cả\" cả group.",
+"Kể một lần bạn giả vờ hiểu bài rồi bị gọi lên bảng và \"tạch\" không phanh.",
+"Kể câu chuyện lần bạn thấy \"1 điều không nên thấy\" khi lỡ mở nhầm điện thoại người khác.",
+"Kể chi tiết lần bạn cố làm \"người lớn\" trước mặt crush nhưng lại \"bể kèo\" ngay tắp lự.",
+"Kể một lần bạn bị con vật nuôi ở nhà \"cà khịa\" khiến cả nhà cười bò.",
+"Kể câu chuyện lần bạn tưởng mình sắp bị đuổi học vì 1 lý do \"trời ơi đất hỡi\".",
+"Kể chi tiết lần đi ăn với hội bạn mà hóa đơn \"chấn động\" hơn dự kiến gấp mấy lần.",
+"Kể một lần bạn từng khóc thét vì sợ ma trong nhà mà hóa ra là... con mèo.",
+"Kể câu chuyện điên rồ về lần bạn cố \"tạo trend\" nhưng chẳng ai theo, chỉ toàn bị cười.",
+"Kể chi tiết lần bạn \"trúng gió\" giữa buổi hẹn hò quan trọng và xử lý tình huống thế nào.",
+"Kể một lần bạn từng bịa siêu năng lực/tài lẻ để \"chảnh\" với người mới quen, hậu quả sao?",
+"Kể câu chuyện lần bạn tưởng mình đang nói chuyện với crush nhưng hóa ra là... nhầm số.",
+"Kể chi tiết lần bạn hét toáng lên giữa nơi công cộng vì 1 lý do siêu nhỏ nhặt.",
+"Kể về khoảnh khắc bạn nhận ra mình đang 'cảm nắng' một ai đó cực mạnh.",
+"Hành động vô tình nào của người khác giới dễ làm bạn rung rinh nhất?",
+"Kể lại lần bạn cố tình làm 'trò con bò' chỉ để thu hút sự chú ý của crush.",
+"Bạn đã bao giờ dùng tài khoản clone để lén soi story của người mình thích chưa?",
+"Món quà tặng crush/người yêu nào làm bạn thấy ngượng ngùng nhất khi nhớ lại?",
+"Nếu được quay lại một buổi hẹn hò thảm họa trong đời, bạn sẽ sửa chữa điều gì?",
+"Kể về lần bạn ghen tị 'vu vơ' nhất nhưng lại phải cố tỏ ra cool ngầu.",
+"Câu thả thính nào bạn từng dùng (hoặc copy) mà giờ nghĩ lại thấy 'sến rện'?",
+"Bạn đã từng giả vờ thích một bài hát/bộ phim chỉ vì crush của bạn thích nó chưa?",
+"Điều gì ở một người có thể khiến bạn 'quay xe' ngay từ buổi hẹn đầu tiên?",
+"Kể lại một giấc mơ hơi 'hường phấn' mà bạn từng có về một người quen.",
+"Bạn từng trải qua cảm giác 'thích một người không thích mình' bao lâu?",
+"Đã bao giờ bạn soạn một tin nhắn siêu dài gửi crush rồi lại xóa đi chưa?",
+"Kể về lần bạn vô tình chạm mắt với người mình thích và phản ứng lúc đó.",
+"Biệt danh bí mật mà bạn từng đặt cho crush cùng hội bạn thân là gì?",
+"Bạn có bao giờ đi xem bói tình duyên chưa? Kết quả lúc đó thế nào?",
+"Kể lại một lần bạn cố tình mặc bộ đồ đẹp nhất chỉ vì biết hôm nay sẽ gặp người ấy.",
+"Bạn thấy điểm quyến định nhất của bản thân khi yêu là gì?",
+"Một 'green flag' (dấu hiệu tốt) khiến bạn đổ gục ngay lập tức là gì?",
+"Đã bao giờ bạn tập tành nấu ăn chỉ để mang cho một người đặc biệt chưa?",
+"Kể về lần bạn lỡ mỉm cười một mình khi đọc tin nhắn của ai đó.",
+"Bạn thường là người chủ động hay đợi người ta mở lời trước?",
+"Đã bao giờ bạn lưu ảnh của crush về máy chưa? Tấm ảnh đó trông như thế nào?",
+"Nếu crush hiện tại tỏ tình ngay lúc này, phản ứng đầu tiên của bạn sẽ là gì?",
+"Kể về lần bạn đi chơi chung nhóm nhưng mắt chỉ dán vào một người.",
+"Mùi hương nước hoa hay sữa tắm nào khiến bạn dễ bị 'say nắng' nhất?",
+"Bạn có bao giờ vô tình gọi nhầm tên người yêu/crush ở chốn đông người chưa?",
+"Trong một mối quan hệ, bạn sợ nhất điều gì xảy ra?",
+"Bạn đã từng làm 'quân sư quạt mo' tình yêu cho bạn thân nhưng lại xúi dại bao giờ chưa?",
+"Điều lãng mạn nhất bạn từng làm cho một người là gì?",
+"Kể lại lần bạn cố tình gửi tin nhắn cho crush rồi giả vờ 'xin lỗi, gửi nhầm'.",
+"Bạn đã từng lập tài khoản ảo để đi bình luận dạo hay 'cà khịa' ai chưa?",
+"Nơi kỳ cục nhất mà bạn từng ngủ gật là ở đâu?",
+"Kể về một lần bạn mặc áo ngược hay quên kéo khóa quần ra đường mà không biết.",
+"Lời nói dối kinh điển nhất bạn hay dùng để từ chối đi chơi với hội bạn là gì?",
+"Bạn đã từng thử tìm kiếm tên mình trên Google chưa? Kết quả ra sao?",
+"Kể lại một lần bạn 'bóng gió' thả thính trên story nhưng crush không hiểu, lại bị đứa khác vào nhận.",
+"Điều ngớ ngẩn nhất bạn từng làm khi ở nhà một mình là gì?",
+"Bạn đã từng lén đọc trộm tin nhắn của người khác chưa?",
+"Nếu bị kẹt trên hoang đảo với một người trong nhóm này, bạn chọn ai và vì sao?",
+"Kể về lần bạn hát nhép theo nhạc cực 'suy' trong phòng tắm rồi bị người nhà bắt gặp.",
+"Bạn có thói quen kỳ quặc nào khi ngủ không? (ví dụ: ngáy, nói mớ, chảy dãi...)",
+"Kể lại khoảnh khắc bạn thấy mình 'ngầu lòi' nhất, nhưng người khác lại thấy rất buồn cười.",
+"Bạn từng có một 'bí mật đen tối' nào thời đi học mà đến giờ bố mẹ vẫn không biết?",
+"Ai là người trong nhóm này có khả năng 'có người yêu' muộn nhất theo dự đoán của bạn?",
+"Kể về lần bạn cố tình làm hỏng đồ của ai đó rồi phi tang không dấu vết.",
+"Bạn từng có biệt danh nào hồi bé mà giờ nghe lại muốn 'đào lỗ chui xuống' không?",
+"Một tin nhắn 'mờ ám' nhất hiện có trong điện thoại của bạn là gửi cho ai?",
+"Kể lại một lần bạn lỡ 'thả bom' nơi công cộng rồi giả vờ vô tội.",
+"Bạn từng có suy nghĩ muốn 'cưa' người yêu của bạn thân bao giờ chưa (dù chỉ xẹt qua)?",
+"Món đồ kỳ cục nhất bạn từng mua trên mạng lúc nửa đêm là gì?",
+"Kể về một lần bạn cố 'sống ảo' ở chỗ sang chảnh nhưng thực chất chỉ đứng ké góc chụp.",
+"Bạn có bao giờ tự luyện tập cảnh mình khóc trước gương để xem có đẹp không chưa?",
+"Nếu được chọn ngoại hình của một người trong nhóm, bạn muốn có điểm gì của ai?",
+"Kể lại pha 'ảo tưởng sức mạnh' lớn nhất của bạn trong chuyện tình cảm.",
+"Bạn đã từng crush giáo viên hay người lớn tuổi hơn mình rất nhiều chưa?",
+"Lần gần đây nhất bạn khóc vì một bộ phim hay truyện ngôn tình là khi nào?",
+"Kể về lần bạn vấp ngã ở chỗ đông người rồi vội vã đứng lên làm như không có chuyện gì.",
+"Bạn đã từng ăn vụng đồ của bạn cùng phòng/người nhà mà không bị phát hiện chưa?",
+"Kể một bí mật mà bạn thề sẽ mang theo xuống mồ (nhưng giờ phải kể 1 nửa).",
+"Nếu phải hôn một người trong nhóm ngay lúc này, bạn sẽ chọn ai?",
+"Kể về lần bạn cố tình 'tạo nét' với người lạ nhưng lại thành ra lố bịch.",
+"Bạn đã bao giờ lấy trộm tiền lẻ của bố mẹ đi chơi nét/mua đồ ăn chưa?",
+"Lời thả thính nào bạn thấy 'buồn nôn' nhất mà người khác từng dùng với bạn?",
+"Kể về lần bạn bị 'bắt quả tang' khi đang tự nói chuyện một mình.",
+"Có lúc nào bạn nhắn tin chửi thề nhưng lại lỡ ấn gửi cho phụ huynh chưa?",
+"Nếu có năng lực tàng hình trong 1 ngày, bạn sẽ làm trò bựa gì đầu tiên?",
+"Kể lại một vụ 'bốc phét' tày trời mà bạn từng kể hồi cấp 1 cấp 2.",
+"Bạn đã bao giờ khóc vì không mua được món đồ mình thích chưa?",
+"Lần bạn dọn phòng sạch nhất là vì lý do gì? (Có phải để mời crush đến không?)",
+"Kể về khoảnh khắc bạn thấy 'quê' nhất khi đi ăn nhà hàng sang trọng.",
+"Bạn từng tạo bao nhiêu nick clone để tự like ảnh mình hay đi stalk người khác?",
+"Bạn đã bao giờ 'cắm sừng' ai chưa, kể cả trong tư tưởng?",
+"Kể lại một lần bạn đi nhầm vào nhà vệ sinh khác giới.",
+"Lần bạn cảm thấy ghen tị nhất với một người bạn cùng giới là khi nào?",
+"Nếu phải công khai lịch sử duyệt web của mình lúc này, bạn sợ nhất người khác thấy gì?",
+"Kể về lần bạn bị 'hớ' khi mua hàng trả giá rồi bị chủ quán chửi.",
+"Bạn đã bao giờ cố tình làm đau bản thân chỉ để được người khác thương hại chưa?",
+"Kể lại lần bạn mượn tiền người khác mà... cố tình quên trả (hoặc giả vờ quên).",
+"Câu nói dối ngọt ngào nhất bạn từng dành cho người yêu cũ là gì?"
+];
+const DARES = [
+"Kể lại 30 giây cuối đời bằng giọng điệu phim tài liệu trong khi giả vờ \"hi sinh\" ngã xuống sàn.",
+"Nhập vai phóng viên tường thuật trực tiếp \"thảm họa\" khi ai đó làm đổ nước trong phòng.",
+"Diễn cảnh bạn bị công an giao thông \"tuýt còi\" dù đang đi bộ.",
+"Giả vờ là idol đang họp báo trả lời câu hỏi vu vơ của nhóm bằng giọng cực nghiêm túc.",
+"Kể 1 câu chuyện ma tự bịa trong 1 phút bằng giọng rùng rợn nhất có thể.",
+"Diễn lại cảnh bạn \"vỡ mộng\" khi phát hiện thần tượng đời thường không như tưởng tượng.",
+"Nhập vai đầu bếp nổi tiếng giới thiệu món \"canh nước lã\" bằng giọng sang chảnh.",
+"Giả làm phóng sự về \"loài sinh vật lạ\" và mô tả người ngồi cạnh bằng giọng khoa học viễn tưởng.",
+"Kể chuyện cổ tích \"Tấm Cám\" phiên bản chế theo hướng bựa nhất bạn nghĩ ra được.",
+"Diễn cảnh bạn vừa trúng số độc đắc nhưng phản ứng như đang... rất chán.",
+"Nhập vai MC giới thiệu \"đại tiệc\" đồ ăn tưởng tượng bằng giọng lồng tiếng phim.",
+"Giả vờ là robot bị lỗi trong 1 phút, nói chuyện giật cục và lặp từ.",
+"Diễn cảnh bạn đi thi hoa hậu nhưng phần thi ứng xử \"toang\" hoàn toàn.",
+"Kể lại 1 \"huyền thoại đô thị\" tự bịa về nhân vật là người ngồi cạnh bạn.",
+"Nhập vai luật sư bào chữa cho \"tội danh\" ăn hết đồ ăn vặt của người khác.",
+"Diễn cảnh bạn bị giật mình khi nghe tiếng động lạ giữa đêm, phóng đại tối đa.",
+"Giả làm streamer đang bình luận trực tiếp trận đấu \"ai ăn nhanh hơn\" giữa 2 người trong nhóm.",
+"Kể 1 câu chuyện tình yêu giữa 2 đồ vật bất kỳ trong phòng, càng lâm ly càng tốt.",
+"Diễn cảnh bạn là influencer đang quảng cáo 1 sản phẩm không tồn tại bằng giọng sến súa.",
+"Nhập vai thầy bói phán 1 câu \"định mệnh\" cho từng người trong nhóm.",
+"Diễn lại cảnh bạn bị bắt quả tang đang nói xấu ai đó ngay khi họ xuất hiện sau lưng.",
+"Kể 1 truyền thuyết tự chế về nguồn gốc của món ăn bạn ghét nhất.",
+"Nhập vai MC bản tin thể thao tường thuật cảnh 2 người chơi oẳn tù tì.",
+"Diễn cảnh bạn vừa bị \"toang\" kế hoạch hẹn hò vì 1 lý do siêu vô lý (do nhóm chọn).",
+"Giả làm nhân vật phản diện phim hoạt hình đọc lời thoại \"âm mưu\" bá đạo.",
+"Kể chuyện 1 lần \"xui tận mạng\" tưởng tượng xảy ra với chính bạn trong 1 phút tới.",
+"Diễn cảnh bạn đang thi catwalk nhưng bị trượt chân giữa sàn diễn.",
+"Nhập vai bà cô hàng xóm \"tám chuyện\" drama của cả xóm bằng giọng lanh lảnh.",
+"Kể lại \"chiến tích\" đánh bại con muỗi khó nhằn nhất đời bạn bằng giọng anh hùng ca.",
+"Diễn cảnh bạn là ca sĩ đang tập luyện cho MV nhưng vũ đạo lỗi tè le.",
+"Giả làm phát thanh viên đọc \"cáo phó\" hài hước cho món đồ ăn vừa hết trong tủ lạnh.",
+"Kể 1 câu chuyện trinh thám ngắn về \"ai đã ăn hết bánh trong tủ\" với các nghi phạm là người trong nhóm.",
+"Diễn cảnh bạn họp báo giải nghệ khỏi vai trò \"học sinh giỏi\" một cách đầy kịch tính.",
+"Nhập vai HLV bóng đá chỉ đạo chiến thuật cho 1 trận đấu... nhặt rác tưởng tượng.",
+"Kể chuyện cổ tích phiên bản chế \"Nàng Bạch Tuyết\" nhưng 7 chú lùn là 7 người bạn trong nhóm.",
+"Diễn cảnh bạn vừa gặp người ngoài hành tinh và cố giải thích \"TikTok\" là gì cho họ hiểu.",
+"Nhập vai giám khảo gameshow ẩm thực chấm điểm ly nước lọc bằng giọng khắt khe.",
+"Kể lại \"sự kiện lịch sử\" ngày bạn học được cách buộc dây giày, kịch tính hóa hết mức.",
+"Diễn cảnh bạn là ngôi sao điện ảnh đang trả lời phỏng vấn thảm đỏ về \"bộ phim\" đời mình.",
+"Giả làm bình luận viên bóng đá tường thuật cảnh ai đó đang... ăn cơm.",
+"Kể 1 câu chuyện phiêu lưu ngắn trong đó bạn là nhân vật chính đi tìm kho báu là gói mì tôm cuối cùng.",
+"Diễn cảnh bạn vừa \"đắc đạo\" sau khi ăn xong 1 bữa no bằng giọng thiền sư.",
+"Nhập vai thầy giáo dạy \"kỹ năng sinh tồn\" khi hết pin điện thoại giữa đường.",
+"Kể chuyện ma tự bịa lấy bối cảnh chính căn phòng bạn đang ngồi, nhân vật chính là món đồ bất kỳ.",
+"Diễn cảnh bạn là chính trị gia đang vận động tranh cử chức \"trưởng nhóm ăn vặt\".",
+"Giả làm huấn luyện viên yoga hướng dẫn 1 động tác \"tự sáng chế\" nghe tên thôi đã buồn cười.",
+"Kể lại \"phốt\" tưởng tượng của 1 nhân vật hoạt hình bạn ghét, càng lố càng tốt.",
+"Diễn cảnh bạn vừa nhận giải cho vai diễn \"học sinh ngủ gật xuất sắc nhất\".",
+"Nhập vai đầu bếp Michelin thẩm định món \"mì gói úp vội\" bằng giọng sang trọng.",
+"Kể 1 câu chuyện hài về cuộc chiến giữa \"ý chí dậy sớm\" và \"cái chăn ấm\" mỗi sáng.",
+"Diễn cảnh bạn họp báo xin lỗi vì \"làm đổ nước mắm\" gây chấn động toàn cầu.",
+"Giả làm MC thời trang giới thiệu bộ đồ ngủ bạn đang mặc như trên sàn catwalk Paris.",
+"Kể chuyện cổ tích chế \"Lọ Lem\" nhưng đôi giày thủy tinh đổi thành đôi dép tổ ong.",
+"Diễn cảnh bạn là vận động viên điền kinh về đích chỉ để... lấy đồ ăn trước người khác.",
+"Nhập vai nhà tiên tri dự đoán \"tận thế\" sẽ xảy ra khi hết đồ ăn vặt trong nhà.",
+"Kể 1 câu chuyện hài hước về \"cuộc nổi loạn\" của đôi tất trong ngăn tủ.",
+"Diễn cảnh bạn vừa tỉnh dậy sau \"giấc ngủ 100 năm\" và không hiểu công nghệ hiện đại.",
+"Giả làm cảnh sát điều tra \"vụ án\" ai đã dùng hết giấy vệ sinh cuối cùng.",
+"Kể lại \"trận chiến sinh tử\" giữa bạn và con muỗi bay vo ve lúc nửa đêm.",
+"Diễn cảnh bạn là ngôi sao nhạc pop đang tập trả lời phỏng vấn về \"album đầu tay\" tưởng tượng.",
+"Nhập vai bác sĩ thú y khám bệnh cho 1 con thú nhồi bông/gấu bông bất kỳ trong nhà.",
+"Kể 1 câu chuyện phiêu lưu ngắn về hành trình đi tìm cục sạc điện thoại bị thất lạc.",
+"Diễn cảnh bạn vừa được phong \"thánh lầy\" của năm và phát biểu cảm nghĩ.",
+"Giả làm giám đốc công ty tưởng tượng đang sa thải chính chiếc điện thoại của mình vì \"hết pin liên tục\".",
+"Kể chuyện hài về lần bạn và cái gối ngủ có 1 \"mối quan hệ phức tạp\".",
+"Diễn cảnh bạn là host gameshow hẹn hò giới thiệu \"thí sinh\" là chiếc dép lê trong nhà.",
+"Nhập vai người dẫn chương trình thời trang đường phố bình luận outfit bạn đang mặc.",
+"Kể 1 câu chuyện ngắn về \"cuộc chiến vương quyền\" giữa các gói mì trong tủ bếp.",
+"Diễn cảnh bạn vừa nhận thư mời vào \"hội những người ngủ nướng huyền thoại\".",
+"Giả làm HLV thể hình hò hét động viên ai đó đứng dậy lấy đồ ăn từ xa.",
+"Kể chuyện cổ tích chế phiên bản \"Ba chú heo con\" với nhân vật phản diện là hóa đơn tiền điện.",
+"Diễn cảnh bạn vừa vô tình trở thành \"idol quốc dân\" chỉ vì 1 điệu nhảy ngẫu hứng.",
+"Nhập vai người dẫn chương trình thời sự đọc \"tin nóng\": ai đó trong phòng vừa hết pin điện thoại.",
+"Kể 1 câu chuyện hài về \"cuộc điều tra\" ai đã bật điều hòa quá lạnh trong phòng.",
+"Diễn cảnh bạn là nhà thám hiểm vừa \"khai phá\" ngăn tủ lạnh và tìm thấy \"cổ vật\" hết hạn.",
+"Giả làm ca sĩ trong buổi tổng duyệt hát nhép 1 câu bằng biểu cảm cực kịch tính.",
+"Kể chuyện ngắn về \"cuộc phiêu lưu\" của 1 sợi mì rơi khỏi bát trong bữa ăn.",
+"Diễn cảnh bạn nhận được \"cuộc gọi định mệnh\" từ tương lai báo tin gì đó ngớ ngẩn.",
+"Nhập vai giáo sư khảo cổ học giải thích \"hiện vật cổ\" là 1 món đồ cũ trong nhà bạn.",
+"Kể 1 câu chuyện hài hước về lần \"chiến đấu\" với dây sạc bị rối tung.",
+"Diễn cảnh bạn vừa thắng giải \"Vua/Nữ hoàng lầy lội\" của khu phố và phát biểu nhận giải.",
+"Giả làm phi công thông báo cho \"hành khách\" trong phòng về \"chuyến bay\" đi ngủ trưa.",
+"Kể chuyện ngắn về hành trình \"trốn deadline\" ly kỳ nhất mà bạn từng tưởng tượng ra.",
+"Diễn cảnh bạn là nhân vật chính phim kinh dị phát hiện \"quái vật\" chính là cục tất bẩn dưới gầm giường.",
+"Nhập vai người dẫn chương trình quay chậm bình luận cảnh ai đó đang... ngáp.",
+"Kể 1 câu chuyện hài về \"vụ trộm\" bí ẩn chiếc tất lẻ không rõ đi đâu mỗi lần giặt đồ.",
+"Diễn cảnh bạn vừa được mời làm đại sứ thương hiệu cho... chiếc gối ôm của mình.",
+"Giả làm MC hô hào cổ vũ cho \"trận chung kết\" giữa cơn buồn ngủ và deadline.",
+"Kể chuyện ngắn tưởng tượng bạn là siêu anh hùng có sức mạnh duy nhất là \"không bao giờ hết pin điện thoại\".",
+"Diễn cảnh bạn nhận \"cuộc gọi khẩn cấp\" từ tủ lạnh báo tin sắp hết đồ ăn.",
+"Nhập vai MC thời trang giới thiệu \"bộ sưu tập\" đồ ngủ mùa đông của chính bạn.",
+"Kể 1 câu chuyện hài về \"phiên tòa\" xử tội chiếc điều khiển tivi mất tích bí ẩn.",
+"Diễn cảnh bạn vừa được phong làm \"trưởng làng\" chuyên trị các drama vô nghĩa của hội bạn.",
+"Giả làm hướng dẫn viên du lịch giới thiệu \"địa danh nổi tiếng\" là góc học tập bừa bộn của bạn.",
+"Kể chuyện ngắn về \"cuộc nổi dậy\" của đống bát đĩa chưa rửa trong bồn.",
+"Diễn cảnh bạn là vận động viên bơi lội đang về đích trong \"hồ bơi\" tưởng tượng giữa phòng khách.",
+"Nhập vai người dẫn chương trình vũ trụ giải thích vì sao \"một chiếc tất luôn biến mất\" là bí ẩn lớn nhất nhân loại.",
+"Kể 1 câu chuyện hài hước về lần \"chiến đấu\" với dây sạc bị rối tung.",
+"Diễn cảnh bạn vừa nhận \"huy chương vàng\" cho môn \"ngủ nướng nghệ thuật\".",
+"Giả làm bình luận viên tường thuật trận đấu \"ai chớp mắt trước\" giữa 2 người trong nhóm.",
+"Kể chuyện ngắn về hành trình \"vượt ải\" đi lấy đồ ăn giữa đêm khuya không gây tiếng động.",
+"Diễn cảnh bạn là phóng viên chiến trường tường thuật \"trận chiến\" giữa bạn và bài tập về nhà.",
+"Nhập vai MC gameshow công bố \"người chiến thắng\" là chiếc gối ôm yêu thích của bạn.",
+"Kể 1 câu chuyện hài về lần \"thảm họa\" khi cố tự làm tóc/trang điểm tại nhà.",
+"Diễn cảnh bạn vừa được bầu làm \"đại sứ\" của hội những người sợ deadline.",
+"Giả làm nhà báo phỏng vấn chiếc gương về \"cảm nghĩ\" khi soi bạn mỗi sáng.",
+"Kể chuyện ngắn tưởng tượng bạn lạc vào thế giới song song nơi ai cũng nói ngược.",
+"Diễn cảnh bạn là huấn luyện viên đang \"training\" cho đội tuyển ngủ nướng quốc gia.",
+"Nhập vai MC đọc lời chia tay đầy cảm xúc với... cái remote hết pin.",
+"Kể 1 câu chuyện hài về \"cuộc chiến giành chăn\" huyền thoại trong gia đình bạn.",
+"Diễn cảnh bạn vừa phát hiện mình có \"siêu năng lực\" luôn chọn đúng hàng chờ lâu nhất.",
+"Giả làm streamer bình luận trực tiếp cảnh ai đó cố mở 1 gói snack khó xé.",
+"Kể chuyện ngắn về \"cuộc gặp gỡ định mệnh\" giữa bạn và chiếc bánh cuối cùng trong hộp.",
+"Diễn cảnh bạn là ca sĩ nhạc kịch hát về nỗi khổ \"hết dữ liệu di động giữa tháng\".",
+"Nhập vai người dẫn chương trình khoa học giải thích tại sao \"thứ 2 luôn dài hơn các ngày khác\".",
+"Kể 1 câu chuyện hài hước về \"cuộc phiêu lưu\" của con muỗi bạn vừa đập trượt 5 lần liên tiếp.",
+"Diễn cảnh bạn vừa được phong tước \"hiệp sĩ giữ deadline\" sau khi thức trắng đêm làm bài.",
+"Giả làm MC lễ trao giải tôn vinh \"chiếc sạc dự phòng\" đã cứu bạn khỏi thảm họa hết pin.",
+"Kể chuyện ngắn tưởng tượng bạn là thám tử điều tra vụ \"ai đã ăn miếng bánh cuối cùng\".",
+"Diễn cảnh bạn vừa họp báo công bố \"giải nghệ\" khỏi thói quen thức khuya (mà biết chắc sẽ không giữ lời).",
+"Nhập vai đầu bếp trên truyền hình chế biến món \"mì tôm sang chảnh\" bằng giọng điệu drama.",
+"Kể 1 câu chuyện hài về lần bạn tưởng nghe thấy tiếng gọi tên mình nhưng chẳng có ai gọi cả.",
+"Diễn cảnh bạn là nhân vật chính phim hành động đang \"chiến đấu\" để giành lấy điều khiển tivi.",
+"Giả làm MC dẫn chương trình đố vui hỏi 1 câu siêu dễ nhưng làm màu thật kịch tính.",
+"Kể chuyện ngắn tưởng tượng về \"cuộc sống bí mật\" của chiếc chìa khóa nhà bạn khi không ai nhìn thấy.",
+"Diễn cảnh bạn vừa nhận \"cuộc gọi từ tương lai\" báo rằng bạn sắp trở thành tỷ phú nhờ 1 lý do vô lý.",
+"Nhập vai giám khảo gameshow nhảy múa chấm điểm cho 1 điệu nhảy tự chế của chính bạn.",
+"Kể 1 câu chuyện hài về \"trận chiến kinh điển\" giữa bạn và con gián lúc nửa đêm.",
+"Diễn cảnh bạn là phi hành gia vừa đặt chân lên \"hành tinh lạ\" chính là ban công nhà bạn.",
+"Giả làm MC chương trình tư vấn tâm lý trả lời thư \"tâm sự\" từ chiếc điện thoại sắp hết pin.",
+"Kể chuyện ngắn tưởng tượng bạn vừa được mời tham gia \"hội đồng\" xét xử vụ \"ai làm mất remote\".",
+"Diễn cảnh bạn là ngôi sao phỏng vấn hậu trường về \"bí quyết\" luôn ngủ quên báo thức.",
+"Nhập vai nhà khoa học giải thích hiện tượng \"một tất luôn ít hơn 1 chiếc\" bằng thuyết âm mưu vui.",
+"Kể 1 câu chuyện hài về lần bạn hoảng loạn tìm điện thoại trong khi nó đang cầm trên tay.",
+"Diễn cảnh bạn vừa được trao \"vương miện\" cho danh hiệu \"người trễ hẹn chuyên nghiệp nhất\".",
+"Giả làm bình luận viên thể thao tường thuật cảnh ai đó cố với lấy đồ trên kệ cao.",
+"Kể chuyện ngắn tưởng tượng bạn là nhân vật phản diện trong phim nhưng lại quá dễ thương để làm ác.",
+"Diễn cảnh bạn vừa tham gia \"hội nghị thượng đỉnh\" giữa các loại đồ ăn vặt trong tủ.",
+"Nhập vai MC dẫn bản tin dự báo \"thời tiết tâm trạng\" của chính bạn hôm nay.",
+"Kể 1 câu chuyện hài hước về lần bạn tưởng nhìn thấy \"người quen\" ở xa nhưng vẫy tay nhầm.",
+"Diễn cảnh bạn là đầu bếp trong show truyền hình bị \"loại\" chỉ vì làm cháy mì gói.",
+"Giả làm phát thanh viên đọc \"tin khẩn\": máy giặt vừa \"nuốt mất\" 1 chiếc tất.",
+"Kể chuyện ngắn tưởng tượng bạn lạc vào \"vũ trụ song song\" nơi deadline không tồn tại.",
+"Diễn cảnh bạn vừa được phong \"huyền thoại sống\" vì khả năng ngủ mọi tư thế, mọi lúc mọi nơi.",
+"Nhập vai người dẫn tour giới thiệu \"bảo tàng\" là góc phòng bừa bộn nhất nhà bạn.",
+"Kể 1 câu chuyện hài về \"cuộc thi sắc đẹp\" giữa các đôi giày trong tủ giày nhà bạn.",
+"Diễn cảnh bạn nhận giải cho màn trình diễn \"giả vờ đang học bài\" xuất sắc nhất.",
+"Giả làm MC truyền hình thực tế công bố \"twist\" bất ngờ: bữa tối nay lại là mì gói.",
+"Kể chuyện ngắn tưởng tượng về hành trình \"trốn thoát\" khỏi cuộc gọi video không muốn nghe máy.",
+"Diễn cảnh bạn tự tổ chức \"lễ trao giải\" cuối năm cho chính những khoảnh khắc \"bựa\" nhất của bản thân trong năm qua.",
+"Gọi điện cho một đứa bạn thân và khóc nức nở nói rằng mình vừa bị 'người ngoài hành tinh' bắt cóc.",
+"Chụp một bức ảnh dìm hàng bản thân ngay lúc này và đăng lên story Facebook/Instagram trong 1 tiếng.",
+"Đi ra ngoài (hoặc ra cửa sổ) và hét to: 'Tôi là người đẹp nhất thế gian!' 3 lần.",
+"Để người bên cạnh dùng bút vẽ một hình bất kỳ lên mặt bạn.",
+"Đăng một status: 'Đang cảm thấy muốn yêu ai đó thật nhiều...' và không giải thích gì thêm trong 30 phút.",
+"Nhảy một điệu sexy ngẫu hứng không nhạc trong vòng 30 giây.",
+"Nhắn tin cho người thứ 5 trong danh sách bạn bè đang online: 'Tự nhiên thấy nhớ cậu quá!'.",
+"Đội quần lót (sạch) lên đầu và hát bài 'Cháu lên ba' bằng giọng opera.",
+"Ngậm một ngụm nước, để người khác kể chuyện cười, ai làm bạn phun nước ra sẽ thắng.",
+"Đứng dựa vào tường như người mẫu đang chụp ảnh tạp chí và thả dáng trong 1 phút.",
+"Giả vờ là một con mèo, đi bằng 4 chân đến chỗ người đối diện và kêu 'Meo' xin ăn.",
+"Dùng miệng để gắp một miếng đồ ăn (hoặc một tờ giấy) từ người của người bên phải.",
+"Hát bài 'Happy Birthday' bằng giọng như đang khóc thảm thiết.",
+"Đọc tin nhắn gần nhất bạn nhận được bằng giọng của chị Google.",
+"Tỏ tình với một đồ vật trong phòng (ví dụ: cái chổi, cái quạt) trong vòng 1 phút.",
+"Cởi tất của bạn ra và đeo vào... tay, sau đó diễn một vở kịch rối tay nhỏ.",
+"Kẹp điện thoại giữa tai và vai, vừa nhảy lò cò vừa đi vòng quanh phòng 2 lần.",
+"Gọi cho mẹ/bố và nói: 'Con quyết định nghỉ học/nghỉ làm để đi tu'.",
+"Để một người trong nhóm vuốt tóc bạn thành một kiểu cực kỳ thảm họa và giữ nguyên trong 3 hiệp.",
+"Ăn một muỗng tương ớt (hoặc gia vị nào đó có sẵn) mà không được uống nước ngay.",
+"Chụp ảnh selfie với biểu cảm xấu nhất có thể và gửi vào group chat của lớp/công ty.",
+"Diễn tả lại cảnh bạn bị tào tháo đuổi nhưng nhà vệ sinh lại đang có người.",
+"Bịt mắt lại, dùng tay sờ mặt một người trong nhóm và đoán xem đó là ai.",
+"Cho phép người bên trái xem lịch sử tìm kiếm Google gần nhất của bạn.",
+"Nhắn tin cho người yêu cũ (hoặc crush cũ): 'Em/Anh dạo này ổn không? Tự nhiên nằm mơ thấy'.",
+"Cầm một cái chổi và biểu diễn tiết mục múa cột cực bốc lửa.",
+"Nói tiếng ngoài hành tinh (tự bịa) trong suốt 2 phút tới, mọi người hỏi gì cũng phải trả lời bằng tiếng đó.",
+"Bốc một người trong nhóm và cõng người đó đi quanh phòng 1 vòng.",
+"Hát một đoạn nhạc rap nhưng bằng tông giọng cải lương.",
+"Dùng mũi để gõ bàn phím nhắn một tin bất kỳ cho người thân.",
+"Nhìn thẳng vào mắt người khác giới trong nhóm 1 phút mà không được chớp mắt hay cười.",
+"Bắt chước điệu cười của từng người trong nhóm cho đến khi mọi người công nhận là giống.",
+"Đeo tạp dề (hoặc khoác áo lộn ngược) và diễn cảnh làm đầu bếp giới thiệu món 'không khí xào tỏi'.",
+"Ngậm một chiếc thìa, trên thìa để một quả chanh/cục giấy, đi thăng bằng quanh phòng không rơi.",
+"Chọn một người và vuốt ve, khen ngợi họ bằng những từ ngữ 'sến sẩm' nhất trong 1 phút.",
+"Thực hiện 10 cái chống đẩy, vừa làm vừa hô to: 'Tôi yêu Toán học / Tôi yêu sếp!'.",
+"Hát quốc ca với biểu cảm của một người đang buồn buồn ngủ rũ rượi.",
+"Quay sang người bên cạnh và nói 'Anh/Em có đôi mắt giống hệt... con lợn nhà anh/em' với vẻ mặt chân thành.",
+"Vẽ một nốt ruồi to chà bá lên mặt và giữ nó trong suốt phần còn lại của trò chơi.",
+"Đứng lên ghế và đọc một bài diễn văn về 'Tầm quan trọng của việc xỉa răng'.",
+"Cho mọi người xem 3 bức ảnh bị giấu/ẩn trong điện thoại của bạn.",
+"Diễn cảnh bạn trúng số nhưng lúc chạy đi lấy tiền thì bị vấp ngã.",
+"Uống một cốc nước pha trộn lẫn lộn (ví dụ: nước lọc + xíu muối + xíu chanh).",
+"Để một người trong nhóm chọn một số điện thoại ngẫu nhiên trong danh bạ, bạn phải gọi và hát 1 câu.",
+"Bắt chước dáng đi của một con đười ươi quanh phòng.",
+"Nhắm mắt lại và để nhóm đút cho bạn ăn 1 món bất kỳ (không độc hại), đoán xem nó là gì.",
+"Múa ballet theo điệu nhạc EDM sôi động (mọi người mở nhạc).",
+"Tháo một chiếc giày và dùng nó làm điện thoại, diễn cảnh bạn đang cãi nhau với người yêu.",
+"Kể một câu chuyện ma nhưng phải chèn từ 'đáng yêu' vào sau mỗi 5 từ.",
+"Bắt chước biểu cảm của một idol Kpop đang 'ending fairy' nhưng thở gấp vì mệt."
+];
+
+let mode = 'truth'; // truth | dare | random
+let currentType = 'truth';
+let flipped = false;
+let playedCount = 0;
+let usedTruth = [];
+let usedDare = [];
+
+const card = document.getElementById('card');
+const faceBack = document.getElementById('faceBack');
+const cardKind = document.getElementById('cardKind');
+const cardText = document.getElementById('cardText');
+const cardNumber = document.getElementById('cardNumber');
+const frontMark = document.getElementById('frontMark');
+const flipBtn = document.getElementById('flipBtn');
+const skipBtn = document.getElementById('skipBtn');
+const playedCountEl = document.getElementById('playedCount');
+const modeBtns = document.querySelectorAll('.mode-btn');
+
+function pickRandom(list, used){
+  if(used.length >= list.length){ used.length = 0; }
+  let idx;
+  do{ idx = Math.floor(Math.random()*list.length); } while(used.includes(idx));
+  used.push(idx);
+  return {text:list[idx], idx};
+}
+
+function setMode(m){
+  mode = m;
+  modeBtns.forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
+  frontMark.textContent = m==='truth' ? '😳' : m==='dare' ? '🔥' : '🎲';
+}
+
+function drawCard(){
+  let type = mode;
+  if(mode==='random'){ type = Math.random() < 0.5 ? 'truth' : 'dare'; }
+  currentType = type;
+  let result;
+  if(type==='truth'){
+    result = pickRandom(TRUTHS, usedTruth);
+    cardKind.textContent = 'THẬT 😳';
+    faceBack.classList.remove('dare-bg');
+    faceBack.classList.add('truth-bg');
+  } else {
+    result = pickRandom(DARES, usedDare);
+    cardKind.textContent = 'THÁCH 🔥';
+    faceBack.classList.remove('truth-bg');
+    faceBack.classList.add('dare-bg');
+  }
+  cardText.textContent = result.text;
+  cardNumber.textContent = '#' + (result.idx+1);
+}
+
+function flipCard(forceNew){
+  if(!flipped){
+    drawCard();
+    card.classList.add('flipped');
+    flipped = true;
+    playedCount++;
+    playedCountEl.textContent = 'Đã chơi: ' + playedCount;
+  } else if(forceNew){
+    // flip back then reveal a new one
+    card.classList.remove('flipped');
+    setTimeout(()=>{
+      drawCard();
+      card.classList.add('flipped');
+      playedCount++;
+      playedCountEl.textContent = 'Đã chơi: ' + playedCount;
+    }, 300);
+  } else {
+    card.classList.remove('flipped');
+    flipped = false;
+  }
+}
+
+flipBtn.addEventListener('click', ()=>{
+  if(!flipped){
+    flipCard(false);
+    flipBtn.textContent = '🔄 Thẻ mới';
+  } else {
+    flipCard(true);
+  }
+});
+
+card.addEventListener('click', ()=>{
+  if(!flipped){
+    flipCard(false);
+    flipBtn.textContent = '🔄 Thẻ mới';
+  }
+});
+
+skipBtn.addEventListener('click', ()=>{
+  card.classList.add('shake');
+  setTimeout(()=>card.classList.remove('shake'), 400);
+  if(flipped){
+    card.classList.remove('flipped');
+    setTimeout(()=>{
+      drawCard();
+      card.classList.add('flipped');
+    }, 300);
+  } else {
+    drawCard();
+  }
+});
+
+modeBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    setMode(btn.dataset.mode);
+    if(flipped){
+      card.classList.remove('flipped');
+      flipped = false;
+      flipBtn.textContent = '🎴 Lật thẻ';
+    }
+  });
+});
+
+setMode('truth');
+</script>
+</body>
+</html>

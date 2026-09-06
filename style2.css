@@ -1,0 +1,33 @@
+h1{
+    color: aqua;
+    font-size: 2em;
+}
+#heading p{
+    color: rgb(22, 24, 24);
+    font-size: 2em;
+    text-align: center;
+}
+hr{
+    border: none;
+     border-top: 4px solid #c97a7a;
+}
+.wrap .item:not(.not.select){
+    color: #da3737;
+}   
+.button{
+    background-color: #da3737;
+    padding: 5px 10px;
+    margin-top:20px;
+    border-radius: 5px;
+    width:120px;
+}
+.card{
+    background-color: #000000;
+    padding: 10px;
+    border-radius:10px;
+    margin:10px;
+    width: 200px;
+}
+#chu{
+    text-align: center;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuyển Thành Viên | Câu Lạc Bộ</title>
+    <!-- Dòng này dùng để liên kết với file CSS bên ngoài -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Banners -->
+    <header>
+        <h1>CÂU LẠC BỘ MEDIA & IT</h1>
+        <p>Khơi nguồn sáng tạo - Đột phá công nghệ - Kết nối đam mê</p>
+        <a href="#apply" class="btn">Đăng ký tham gia ngay</a>
+    </header>
+
+    <!-- Giới thiệu -->
+    <section id="about">
+        <h2>Về Chúng Mình</h2>
+        <p class="about-text">
+            Câu lạc bộ là môi trường năng động dành cho các bạn sinh viên muốn trải nghiệm thực tế, nâng cao kỹ năng mềm và mở rộng mối quan hệ. Dù bạn là một "tay mơ" hay đã có kinh nghiệm, chỉ cần bạn có đam mê, chúng mình luôn chào đón!
+        </p>
+    </section>
+
+    <!-- Các ban -->
+    <section id="departments">
+        <h2>Bạn Thuộc Về Mảnh Ghép Nào?</h2>
+        <div class="departments">
+            <div class="card">
+                <h3>Ban Truyền Thông</h3>
+                <p>Nơi thỏa sức sáng tạo với content, thiết kế hình ảnh, edit video, quản lý fanpage và xây dựng hình ảnh cho CLB.</p>
+            </div>
+            <div class="card">
+                <h3>Ban Chuyên Môn</h3>
+                <p>Nơi dành cho những bộ óc logic đam mê code, tìm hiểu phần cứng, học hỏi thuật toán và các công nghệ mới.</p>
+            </div>
+            <div class="card">
+                <h3>Ban Sự Kiện</h3>
+                <p>Chịu trách nhiệm lên ý tưởng, lập kế hoạch, điều phối nhân sự và tổ chức các hoạt động lớn nhỏ của CLB.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form đăng ký -->
+    <section id="apply">
+        <h2>Đơn Đăng Ký Ứng Tuyển</h2>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="name">Họ và Tên:</label>
+                <input type="text" id="name" name="name" required placeholder="Nhập họ và tên của bạn">
+            </div>
+
+            <div class="form-group">
+                <label for="student-id">Mã Sinh Viên:</label>
+                <input type="text" id="student-id" name="student-id" required placeholder="Ví dụ: 2025xxxxx">
+            </div>
+
+            <div class="form-group">
+                <label for="department">Ban Ứng Tuyển:</label>
+                <select id="department" name="department" required>
+                    <option value="">-- Chọn ban bạn muốn tham gia --</option>
+                    <option value="truyen_thong">Ban Truyền Thông</option>
+                    <option value="chuyen_mon">Ban Chuyên Môn</option>
+                    <option value="su_kien">Ban Sự Kiện</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reason">Tại sao bạn muốn tham gia câu lạc bộ?</label>
+                <textarea id="reason" name="reason" rows="4" required placeholder="Hãy chia sẻ ngắn gọn về đam mê, điểm mạnh hoặc mong muốn học hỏi của bạn nhé..."></textarea>
+            </div>
+
+            <button type="submit">Gửi Đơn Ứng Tuyển</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Câu Lạc Bộ Media & IT. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
