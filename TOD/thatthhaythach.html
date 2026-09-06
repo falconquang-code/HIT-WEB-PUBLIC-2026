@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Thật hay Thách? 🔥</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#FF3E9D;
+    --purple:#7B2FF7;
+    --indigo:#1B0E3D;
+    --yellow:#FFD23F;
+    --mint:#2BE0C8;
+    --card-truth:#2C1B5E;
+    --card-dare:#5E1B3B;
+    --ink:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    height:100%;
+    font-family:'Be Vietnam Pro', sans-serif;
+    color:var(--ink);
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,62,157,0.55), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(43,224,200,0.35), transparent 40%),
+      radial-gradient(circle at 75% 85%, rgba(123,47,247,0.55), transparent 50%),
+      linear-gradient(160deg, #1B0E3D 0%, #2C1257 45%, #3A0F63 100%);
+    background-attachment:fixed;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:relative;
+  }
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(60px);
+    opacity:0.45;
+    z-index:0;
+    pointer-events:none;
+    animation:float 14s ease-in-out infinite;
+  }
+  .blob1{width:280px;height:280px;background:var(--pink);top:-60px;left:-60px;}
+  .blob2{width:320px;height:320px;background:var(--mint);bottom:-80px;right:-60px;animation-delay:-4s;}
+  .blob3{width:220px;height:220px;background:var(--yellow);top:40%;right:-40px;animation-delay:-8s;opacity:0.25;}
+  @keyframes float{
+    0%,100%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-25px) translateX(15px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .blob{animation:none;}
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:480px;
+    padding:28px 20px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .logo{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:2.3rem;
+    line-height:1.05;
+    margin:0;
+    letter-spacing:0.5px;
+  }
+  .logo span.dot{color:var(--yellow);}
+  .logo .grad{
+    background:linear-gradient(90deg, var(--pink), var(--mint));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .tagline{
+    margin:6px 0 0;
+    font-size:0.95rem;
+    opacity:0.75;
+    font-weight:500;
+  }
+
+  /* Mode selector */
+  .mode-select{
+    display:flex;
+    gap:10px;
+    width:100%;
+    margin-bottom:20px;
+  }
+  .mode-btn{
+    flex:1;
+    border:2px solid rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.06);
+    color:var(--ink);
+    padding:13px 8px;
+    border-radius:16px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.02rem;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    text-align:center;
+  }
+  .mode-btn:active{transform:scale(0.96);}
+  .mode-btn.truth.active{
+    background:linear-gradient(135deg, #6C5CE7, #7B2FF7);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(123,47,247,0.45);
+  }
+  .mode-btn.dare.active{
+    background:linear-gradient(135deg, #FF3E9D, #FF7A59);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(255,62,157,0.45);
+  }
+  .mode-btn.random.active{
+    background:linear-gradient(135deg, #2BE0C8, #3AB0FF);
+    border-color:transparent;
+    box-shadow:0 8px 24px rgba(43,224,200,0.4);
+  }
+
+  /* Card area */
+  .stage{
+    width:100%;
+    aspect-ratio:3/4;
+    max-height:56vh;
+    perspective:1400px;
+    margin-bottom:22px;
+  }
+  .card{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.2,.9,.25,1.1);
+    cursor:pointer;
+  }
+  .card.flipped{transform:rotateY(180deg);}
+  .card.shake{animation:shake .4s ease;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0) rotateY(var(--ry,0));}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .face{
+    position:absolute;
+    inset:0;
+    border-radius:26px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 20px 45px rgba(0,0,0,0.35);
+  }
+  .face-front{
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12), transparent 60%),
+      linear-gradient(150deg, #3A2178, #1B0E3D 70%);
+    border:2px solid rgba(255,255,255,0.14);
+  }
+  .face-front .big-mark{
+    font-family:'Baloo 2', sans-serif;
+    font-size:5rem;
+    font-weight:800;
+    background:linear-gradient(90deg, var(--pink), var(--yellow), var(--mint));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin:0;
+  }
+  .face-front .hint{
+    margin-top:10px;
+    font-size:0.95rem;
+    opacity:0.7;
+    font-weight:500;
+  }
+  .face-back{
+    transform:rotateY(180deg);
+    justify-content:space-between;
+  }
+  .face-back.truth-bg{
+    background:linear-gradient(155deg, #4A2E9E, #2C1B5E 75%);
+    border:2px solid rgba(255,255,255,0.16);
+  }
+  .face-back.dare-bg{
+    background:linear-gradient(155deg, #B0206E, #5E1B3B 75%);
+    border:2px solid rgba(255,255,255,0.16);
+  }
+  .card-kind{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1.05rem;
+    letter-spacing:0.3px;
+    padding:6px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.16);
+    margin-top:4px;
+  }
+  .card-text{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:600;
+    font-size:1.5rem;
+    line-height:1.35;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 4px;
+  }
+  .card-number{
+    font-size:0.8rem;
+    opacity:0.6;
+    margin-bottom:2px;
+    font-weight:500;
+  }
+
+  /* Controls */
+  .controls{
+    display:flex;
+    gap:14px;
+    width:100%;
+  }
+  .btn{
+    flex:1;
+    border:none;
+    padding:16px 10px;
+    border-radius:18px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1.08rem;
+    cursor:pointer;
+    color:var(--ink);
+    transition:transform .15s ease, filter .2s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .btn:active{transform:scale(0.96);}
+  .btn-flip{
+    background:linear-gradient(135deg, var(--yellow), #FF9A3D);
+    color:#2A1200;
+    box-shadow:0 10px 26px rgba(255,157,61,0.35);
+    flex:1.4;
+  }
+  .btn-skip{
+    background:rgba(255,255,255,0.08);
+    border:2px solid rgba(255,255,255,0.22);
+  }
+  .btn-skip:hover{background:rgba(255,255,255,0.14);}
+
+  .footer-info{
+    margin-top:20px;
+    font-size:0.82rem;
+    opacity:0.55;
+    text-align:center;
+  }
+
+  .badge-count{
+    position:absolute;
+    top:14px;
+    right:16px;
+    font-size:0.75rem;
+    background:rgba(0,0,0,0.28);
+    padding:5px 10px;
+    border-radius:999px;
+    font-weight:600;
+    opacity:0.85;
+  }
+
+  @media (max-width:360px){
+    .logo{font-size:1.9rem;}
+    .card-text{font-size:1.28rem;}
+    .face-front .big-mark{font-size:4rem;}
+  }
+</style>
+</head>
+<body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <div class="wrap">
+    <header>
+      <h1 class="logo">Thật <span class="dot">hay</span> <span class="grad">Thách?</span> 🔥</h1>
+      <p class="tagline">Chọn phe, lật thẻ, dám không dám!</p>
+    </header>
+
+    <div class="mode-select" role="group" aria-label="Chọn chế độ">
+      <button class="mode-btn truth active" data-mode="truth">😳 Thật</button>
+      <button class="mode-btn dare" data-mode="dare">🔥 Thách</button>
+      <button class="mode-btn random" data-mode="random">🎲 Ngẫu nhiên</button>
+    </div>
+
+    <div class="stage">
+      <div class="card" id="card">
+        <div class="face face-front" id="faceFront">
+          <span class="badge-count" id="playedCount">Đã chơi: 0</span>
+          <p class="big-mark" id="frontMark">?</p>
+          <p class="hint">Chạm vào thẻ hoặc bấm "Lật thẻ"</p>
+        </div>
+        <div class="face face-back" id="faceBack">
+          <div class="card-number" id="cardNumber">#1</div>
+          <span class="card-kind" id="cardKind">THẬT</span>
+          <div class="card-text" id="cardText">Câu hỏi sẽ hiện ở đây...</div>
+          <div style="height:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-skip" id="skipBtn">⏭️ Bỏ qua</button>
+      <button class="btn btn-flip" id="flipBtn">🎴 Lật thẻ</button>
+    </div>
+
+    <p class="footer-info">Chơi cùng bạn bè, tôn trọng giới hạn của nhau nhé 💜</p>
+  </div>
+
+<script>
+const TRUTHS = [
+"Bạn từng thích thầm ai trong lớp chưa? Đó là ai?",
+"Tin nhắn cuối cùng bạn xóa vội trong điện thoại là gì?",
+"Bạn đã từng nói dối bố mẹ về việc gì gần đây nhất?",
+"Nếu được nhắn một câu cho \"người ấy\" ngay bây giờ, bạn sẽ nói gì?",
+"Bạn từng \"cà khịa\" ai trong nhóm mà họ không biết chưa?",
+"Crush đầu đời của bạn là ai?",
+"Bạn có đang giấu ai đó chuyện gì không?",
+"Lần gần nhất bạn khóc là khi nào và vì sao?",
+"Bạn từng chấm điểm ngoại hình bản thân bao nhiêu trên thang 10?",
+"Trong nhóm này, bạn nghĩ ai dễ tán đổ nhất?",
+"Bạn từng \"seen\" tin nhắn ai rồi lờ đi không trả lời chưa?",
+"Nếu phải chọn 1 người trong phòng để đi chung đảo hoang, bạn chọn ai?",
+"Bạn có tài khoản ảo (clone) trên mạng xã hội không?",
+"Bí mật xấu hổ nhất thời cấp 2 của bạn là gì?",
+"Bạn từng thi trượt môn nào và giấu bố mẹ chưa?",
+"Bạn có đang thích ai trong phòng này không?",
+"Điều ngại nhất bạn từng làm trước đám đông là gì?",
+"Bạn từng \"rình\" story người yêu cũ/crush bao nhiêu lần trong 1 ngày?",
+"Nếu phải xóa một ứng dụng mãi mãi, bạn xóa app nào?",
+"Bạn có từng chép bài kiểm tra chưa?",
+"Ai là người bạn nhắn tin nhiều nhất trong 1 tuần qua?",
+"Bạn từng \"block\" ai vì giận dỗi chưa?",
+"Nỗi sợ lớn nhất của bạn là gì?",
+"Bạn từng nói xấu bạn thân sau lưng chưa?",
+"Câu chuyện tình đầu tiên của bạn kết thúc thế nào?",
+"Bạn có đang \"để ý\" ai không dám thổ lộ?",
+"Điều bạn hối hận nhất trong năm nay là gì?",
+"Bạn từng giả vờ ốm để nghỉ học/nghỉ làm chưa?",
+"Ai là người khiến tim bạn đập nhanh hơn gần đây?",
+"Bạn từng bị bắt gặp đang nói xấu ai chưa?",
+"Nếu có thể quay lại 1 năm trước, bạn sẽ thay đổi điều gì?",
+"Bạn có playlist chỉ nghe khi buồn không? Đó là những bài gì?",
+"Bạn từng yêu xa chưa? Cảm giác thế nào?",
+"Trong nhóm bạn, ai là người bạn tin tưởng nhất?",
+"Bạn từng theo dõi story crush đến mức nào?",
+"Số lần bạn từng thất tình là bao nhiêu?",
+"Bạn có đang chat với 2 người cùng lúc theo kiểu \"thả thính\" không?",
+"Điều gì khiến bạn tự ti nhất về bản thân?",
+"Bạn từng lỡ \"thả tim\" story crush chưa?",
+"Câu nói dối lớn nhất bạn từng nói là gì?",
+"Bạn từng thích một người bạn của người yêu/crush mình chưa?",
+"Nếu ai đó tỏ tình với bạn hôm nay, bạn sẽ trả lời sao?",
+"Bạn từng ghen tị với ai trong nhóm này chưa?",
+"Điều bạn chưa từng kể với bố mẹ là gì?",
+"Bạn từng bị \"đá\" hay từng \"đá\" ai chưa? Kể lại đi.",
+"Nếu được chọn siêu năng lực, bạn chọn đọc suy nghĩ hay tàng hình? Vì sao?",
+"Bạn từng giả vờ vui khi trong lòng đang buồn không?",
+"Điều xấu hổ nhất bạn từng làm trước mặt crush là gì?",
+"Bạn có tin vào tình yêu sét đánh không?",
+"Bạn từng \"unfriend\" ai vì lý do gì đó nhỏ nhặt chưa?",
+"Bạn từng bịa lý do để hủy hẹn với ai đó chưa?",
+"Nếu phải hẹn hò với 1 người trong phòng, bạn chọn ai?",
+"Bạn có nhật ký bí mật không? Nó viết về gì?",
+"Bạn từng lỡ thả tim nhầm ảnh cũ của crush chưa?",
+"Ai là người bạn ghét nhất từng học chung?",
+"Bạn từng trốn học đi chơi chưa?",
+"Bạn từng nói \"yêu\" mà không thật lòng chưa?",
+"Món quà ý nghĩa nhất bạn từng nhận là gì, ai tặng?",
+"Bạn có sợ ế không?",
+"Nếu điện thoại bạn bị mọi người xem lịch sử tìm kiếm ngay bây giờ, bạn có lo không? Vì sao?",
+"Bạn từng bị điểm kém rồi tìm cách giấu bố mẹ chưa?",
+"Trong group chat lớp, bạn nghĩ ai đang \"thả thính\" ai?",
+"Bạn từng thầm mong bạn thân chia tay người yêu tệ của họ chưa?",
+"Câu chuyện xấu hổ nhất bạn từng gặp ở nơi công cộng là gì?",
+"Bạn từng nói dối về tuổi/tên khi làm quen online chưa?",
+"Bạn có đang thích 2 người cùng lúc không?",
+"Bạn từng bị crush \"seen\" tin nhắn tỏ tình chưa?",
+"Nếu có 1 điều ước, bạn ước điều gì cho bản thân?",
+"Bạn từng khóc vì một bộ phim/bài hát chưa?",
+"Bạn từng nói xấu thầy cô sau lưng chưa?",
+"Môn học bạn ghét nhất là gì và vì sao?",
+"Bạn từng cãi nhau to với bố mẹ về chuyện gì?",
+"Bạn từng giả chữ ký phụ huynh chưa?",
+"Nếu được nghỉ học 1 tuần ngay bây giờ, bạn sẽ làm gì đầu tiên?",
+"Bạn từng bị đuổi khỏi lớp hoặc phạt đứng ngoài chưa?",
+"Kỷ niệm đáng xấu hổ nhất ở trường của bạn là gì?",
+"Bạn có bao giờ giả vờ hiểu bài dù không hiểu gì không?",
+"Bạn từng thích thầy/cô giáo nào không?",
+"Nếu được đổi tên bố mẹ đặt, bạn muốn tên gì?",
+"Bạn từng giận bố mẹ đến mức muốn bỏ nhà đi chưa?",
+"Bạn có hay so sánh bản thân với anh chị em trong nhà không?",
+"Bạn từng lén lấy tiền/đồ của người thân chưa (dù nhỏ)?",
+"Gia đình bạn có bí mật gì mà ít người biết không?",
+"Bạn từng ước mình sinh ra trong gia đình khác chưa?",
+"Bạn sợ điều gì nhất khi nghĩ về tương lai?",
+"Nếu chỉ được giữ 1 kỷ niệm trong đời, bạn giữ kỷ niệm nào?",
+"Bạn có nghĩ mình là người tốt không? Vì sao?",
+"Điều bạn tự hào nhất về bản thân là gì?",
+"Bạn từng ghen tị với thành công của bạn bè chưa?",
+"Bạn có đang cảm thấy áp lực về điều gì trong cuộc sống không?",
+"Nếu ai đó hỏi điểm yếu lớn nhất của bạn, bạn trả lời sao?",
+"Bạn từng nói dối để trông \"ngầu\" hơn trước mặt người khác chưa?",
+"Điều khiến bạn mất ngủ gần đây nhất là gì?",
+"Bạn từng ước được nổi tiếng trên mạng xã hội chưa?",
+"Nếu có thể biến mất 1 ngày không ai tìm thấy, bạn có làm không?",
+"Bạn dành bao nhiêu giờ mỗi ngày cho điện thoại?",
+"Bạn từng sống ảo (chỉnh ảnh quá đà) chưa?",
+"Bạn từng đăng story rồi xóa vội vì hối hận chưa?",
+"Tài khoản nào bạn theo dõi nhiều nhất mà không dám nói ra?",
+"Bạn từng \"seen\" và cố tình không rep tin nhắn ai chưa?",
+"Bạn có acc nào để \"rình\" người khác không?",
+"Bạn từng nhắn nhầm tin nhắn cho sai người chưa? Chuyện gì xảy ra?",
+"Người nào trên mạng xã hội bạn thấy \"sợ\" nhất khi họ xem story mình?",
+"Bạn từng tương tác ảo (thả tim, comment) chỉ để gây chú ý với ai đó chưa?",
+"Bạn có đang \"cà khịa\" ai qua story ẩn ý không?",
+"Điều ngớ ngẩn nhất bạn từng làm khi quá vui là gì?",
+"Bạn từng bị ngã trước mặt nhiều người chưa? Kể lại.",
+"Âm thanh xấu hổ nhất bạn từng phát ra trước đám đông là gì?",
+"Bạn từng gọi nhầm tên người yêu/crush cũ chưa?",
+"Kiểu tóc/trang phục xấu nhất bạn từng mặc ra đường là gì?",
+"Bạn từng bị camera quay lại khoảnh khắc \"quê độ\" chưa?",
+"Câu chuyện hài nhất về lần đầu hẹn hò của bạn là gì?",
+"Bạn từng nhầm người lạ là người quen rồi vẫy tay chưa?",
+"Trò đùa nào bạn từng chơi khiến bạn bè giận thật sự?",
+"Bạn từng bị \"quê\" vì để lộ bí mật ai đó chưa?",
+"Nếu được chọn 1 siêu năng lực để tán crush, bạn chọn gì?",
+"Bài hát nào bạn nghe đi nghe lại để nhớ ai đó?",
+"Bạn có sợ ma không? Kể trải nghiệm rùng rợn nhất.",
+"Nếu ngày mai là ngày cuối cùng, bạn muốn làm gì?",
+"Bạn từng thích 1 người mà cả nhóm đều phản đối chưa?",
+"Điều bạn ghét nhất ở chính mình là gì?",
+"Nếu phải nhắn tin xin lỗi 1 người ngay bây giờ, đó sẽ là ai?",
+"Bạn từng giả vờ không thấy tin nhắn để tạo khoảng cách chưa?",
+"Bạn nghĩ ai trong nhóm hợp làm người yêu bạn nhất?",
+"Câu chuyện tình cảm nào khiến bạn tin vào \"định mệnh\"?",
+"Bạn từng bị phản bội bởi bạn thân chưa?",
+"Nếu crush chủ động nhắn tin trước, bạn phản ứng thế nào?",
+"Bạn có đang nuôi hy vọng với ai dù biết vô vọng không?",
+"Kỷ niệm đáng nhớ nhất giữa bạn và bạn thân là gì?",
+"Nếu được nói 1 câu với \"crush cũ\", bạn sẽ nói gì?",
+"Bạn từng bị bắt tại trận đang \"rình\" story ai chưa?",
+"Bạn có tin nhắn nào chưa dám gửi đi, đang nằm trong ô soạn thảo không?",
+"Nếu phải chọn giữa tình yêu và tình bạn, bạn chọn gì?",
+"Bạn từng thấy ghen khi crush nói chuyện với người khác chưa?",
+"Điều bạn sợ nhất khi yêu là gì?",
+"Bạn từng lỡ lời làm tổn thương người thân chưa?",
+"Nếu biết trước ngày mai sẽ chia tay, bạn có bắt đầu yêu không?",
+"Bạn từng đọc trộm nhật ký hoặc tin nhắn của ai chưa?",
+"Điều bạn muốn thay đổi nhất ở ngoại hình mình là gì?",
+"Bạn từng nói \"không sao đâu\" trong khi thực ra rất tổn thương chưa?",
+"Ai là người bạn muốn xin lỗi nhất nhưng chưa dám?",
+"Bạn từng thấy tự ti khi đứng cạnh bạn thân \"lung linh\" hơn chưa?",
+"Nếu bạn có thể đọc được 1 tin nhắn bất kỳ của ai đó, bạn muốn đọc của ai?",
+"Bạn từng im lặng biến mất với ai chưa?",
+"Điều khiến bạn cảm thấy cô đơn nhất là gì?",
+"Bạn từng thấy nhẹ nhõm khi 1 mối quan hệ nào đó kết thúc chưa?",
+"Nếu crush của bạn hẹn hò người khác, bạn sẽ phản ứng thế nào?",
+"Bạn từng nói dối về cảm xúc thật của mình để không làm ai buồn chưa?",
+"Điều gì khiến bạn thấy mình \"trưởng thành\" hơn năm ngoái?",
+"Bạn từng ước có thể quay lại và không nói một câu nào đó chưa?",
+"Bạn có đang chờ đợi tin nhắn từ ai đó không?",
+"Nếu phải mô tả bản thân bằng 3 từ, đó là gì?",
+"Bạn từng thấy ganh tị vì bạn bè có người yêu còn mình thì chưa?",
+"Điều gì trong quá khứ bạn ước mình có thể xóa hoàn toàn?",
+"Bạn từng bị so sánh với \"con nhà người ta\" chưa? Cảm giác thế nào?",
+"Nếu có thể nhắn 1 tin nhắn ẩn danh cho cả nhóm, bạn sẽ viết gì?",
+"Bạn từng thấy hối hận vì đã từ chối lời tỏ tình của ai đó chưa?",
+"Điều gì khiến bạn tin tưởng một người ngay từ lần đầu gặp?",
+"Bạn từng nhận cả chục tin nhắn rồi vẫn chưa biết trả lời sao chưa?",
+"Nếu hôm nay là sinh nhật cuối cùng được tổ chức, bạn muốn ước điều gì?"
+];
+
+const DARES = [
+"Nhảy 1 điệu TikTok đang hot ngay bây giờ.",
+"Gọi điện cho người thứ 5 trong danh bạ và hát chúc mừng sinh nhật (dù không phải sinh nhật họ).",
+"Bắt chước giọng nói của 1 người trong phòng cho đến khi ai đó đoán đúng.",
+"Đăng story với caption \"Tôi đang rất hạnh phúc\" kèm 1 emoji bất kỳ trong 5 phút.",
+"Làm mặt xấu và giữ nguyên trong 30 giây.",
+"Gửi tin nhắn \"Chào cậu, tớ nhớ cậu\" cho người thứ 3 trong danh sách trò chuyện gần đây.",
+"Hát 1 đoạn bài hát bất kỳ bằng giọng nói lái.",
+"Để người chơi khác trang điểm cho bạn trong 2 phút với mắt nhắm.",
+"Nhại lại biểu cảm của người ngồi cạnh trong 1 phút.",
+"Gọi video cho ai đó và nói \"Tớ vừa trúng số!\" rồi cúp máy ngay.",
+"Diễn tả 1 bộ phim yêu thích chỉ bằng hành động, không nói lời nào.",
+"Ăn 1 thìa nước mắm hoặc tương ớt (tùy độ \"dữ\" của nhóm).",
+"Đứng lên hát karaoke không nhạc 1 đoạn bài hát bất kỳ.",
+"Cho cả nhóm xem 3 tấm ảnh gần nhất trong thư viện ảnh điện thoại.",
+"Nhắn tin cho crush (hoặc người bất kỳ) dòng chữ do cả nhóm chọn.",
+"Đội 1 vật bất kỳ lên đầu và đi vòng quanh phòng như người mẫu.",
+"Bắt chước 1 con vật bất kỳ trong 1 phút.",
+"Để cả nhóm lục danh bạ điện thoại bạn trong 30 giây.",
+"Uống 1 ly nước mà không dùng tay.",
+"Làm 10 cái hít đất (chống đẩy) ngay tại chỗ.",
+"Gọi cho phụ huynh và nói \"Con yêu bố/mẹ nhiều lắm ạ\" rồi cúp máy.",
+"Nói 1 câu bằng giọng vùng miền khác quê bạn.",
+"Đăng lên story 1 bức ảnh xấu nhất trong điện thoại và để 10 phút.",
+"Kể 1 câu chuyện cười và không được cười trong lúc kể.",
+"Đổi tên hiển thị mạng xã hội thành 1 cái tên do nhóm đặt trong 24 giờ.",
+"Đi giật lùi quanh phòng trong 1 phút.",
+"Làm động tác nhảy \"gà con\" trong 30 giây.",
+"Gọi cho 1 người bất kỳ và hỏi \"Bạn ăn cơm chưa?\" bằng giọng nghiêm túc nhất có thể.",
+"Cho người chơi khác xem tin nhắn gần nhất bạn gửi cho crush (nếu có).",
+"Búng tay và diễn 1 câu thần chú như vừa \"triệu hồi\" phép màu.",
+"Nhại lại 1 quảng cáo TV bất kỳ.",
+"Đứng trên ghế hát 1 câu trong bài hát thiếu nhi.",
+"Cho nhóm xem bài hát bạn nghe nhiều nhất tuần này trên app nhạc.",
+"Thử nói liên tục không vấp trong 20 giây về chủ đề \"mì tôm\".",
+"Uống hết ly nước trong 5 giây.",
+"Làm biểu cảm hôn gió gửi cho camera trong 10 giây.",
+"Gửi 1 tin nhắn thoại hát bài \"Happy Birthday\" cho người bất kỳ trong danh bạ.",
+"Đứng yên như tượng trong 1 phút dù bị trêu chọc.",
+"Kể tên 3 người bạn nghĩ là \"cặp tiềm năng\" trong nhóm.",
+"Diễn lại cảnh tỏ tình trong 1 bộ phim bạn thích.",
+"Đeo tất làm găng tay trong 5 phút.",
+"Ăn 1 miếng chanh không nhăn mặt.",
+"Bắt chước cách đi của 1 người nổi tiếng để nhóm đoán.",
+"Gọi cho một người bạn và nói bằng giọng robot trong 30 giây.",
+"Nhắm mắt vẽ chân dung 1 người trong nhóm.",
+"Múa 1 điệu ballet ngẫu hứng trong 30 giây.",
+"Đăng 1 dòng trạng thái \"vô nghĩa\" do nhóm tự chọn lên story.",
+"Cho xem tấm ảnh đầu tiên trong album camera roll của bạn.",
+"Tạo dáng chụp ảnh như đang chụp bìa album ca nhạc.",
+"Nói không ngừng nghỉ trong 30 giây về \"tại sao con mèo là bá chủ vũ trụ\".",
+"Thử làm giọng MC giới thiệu 1 sản phẩm tưởng tượng trong 30 giây.",
+"Nhảy theo nhạc nền do nhóm bật ngẫu nhiên trong 20 giây.",
+"Gọi điện chúc mừng năm mới cho 1 người bất kỳ (dù không đúng dịp).",
+"Đứng dậy giới thiệu bản thân như đang thi hoa hậu.",
+"Thử đi bằng gót chân quanh phòng.",
+"Kể 1 bí mật \"vô hại\" của bản thân cho cả nhóm nghe.",
+"Giả vờ khóc thật to trong 10 giây rồi cười lớn ngay sau đó.",
+"Làm 1 câu rap ngẫu hứng về người ngồi cạnh.",
+"Diễn tả cảm giác \"hết tiền cuối tháng\" chỉ bằng biểu cảm khuôn mặt.",
+"Đội chăn/khăn làm siêu anh hùng và diễn 1 cảnh giải cứu thế giới.",
+"Bắt chước tiếng động vật cho đến khi cả nhóm đoán đúng con vật.",
+"Đứng 1 chân trong 1 phút không được ngã.",
+"Kể lại 1 giấc mơ kỳ lạ gần đây nhất của bạn.",
+"Giả giọng người dẫn chương trình thời sự đọc bản tin về nhóm bạn.",
+"Cho cả nhóm chỉnh sửa 1 dòng trạng thái và đăng lên story của bạn.",
+"Vẽ 1 bức tranh bằng chân (không dùng tay) trong 1 phút.",
+"Thử làm mặt \"baby\" ngây thơ nhất có thể trong 10 giây.",
+"Đọc thuộc lòng bảng chữ cái ngược từ Z về A.",
+"Nhại giọng nói của người dẫn quảng cáo mỹ phẩm.",
+"Gọi video cho bạn thân và làm mặt xấu ngay khi họ bắt máy.",
+"Ăn 1 miếng bánh mà không dùng tay, chỉ dùng miệng.",
+"Nhảy điệu \"con vịt\" trong 20 giây.",
+"Cho nhóm xem 3 emoji bạn dùng nhiều nhất tuần qua.",
+"Đứng dậy và làm 1 bài phát biểu ngắn về \"vì sao tôi xứng đáng được yêu thương\".",
+"Búng tay 10 lần liên tục trong khi hát 1 câu bất kỳ.",
+"Đổi ảnh đại diện mạng xã hội thành ảnh do nhóm chọn trong 1 giờ.",
+"Gửi tin nhắn \"Tớ vừa nhặt được ví, bạn có làm rơi không?\" cho 1 người bất kỳ.",
+"Thử làm biểu cảm của 7 cung hoàng đạo khác nhau liên tiếp.",
+"Kể 3 điều bạn thích ở người ngồi bên trái mình.",
+"Diễn lại cảnh bạn bị điểm kém phải giải thích với bố mẹ.",
+"Thử nói ngọng trong 1 phút khi trả lời câu hỏi của nhóm.",
+"Cho nhóm xem tin nhắn gần nhất trong hộp thư đã lưu trữ (nếu có).",
+"Nhại lại cách nói chuyện của 1 giáo viên bạn từng học.",
+"Đứng dậy nhảy theo nhạc trong 15 giây mà không được cười.",
+"Gửi 1 tin nhắn cảm ơn chân thành cho người bạn ít nói chuyện nhất gần đây.",
+"Thử làm 1 điệu bộ \"thả thính\" hài hước với người ngồi đối diện.",
+"Kể 1 câu chuyện xấu hổ bằng giọng kể chuyện cổ tích.",
+"Đeo khẩu trang ngược và nói chuyện bình thường trong 1 phút.",
+"Thử bắt chước cách nói của 1 idol bạn thích.",
+"Cho nhóm xem video cuối cùng bạn lưu trong điện thoại.",
+"Giả vờ phỏng vấn xin việc trong 1 phút với câu hỏi ngẫu nhiên từ nhóm.",
+"Thử làm động tác yoga bất kỳ trong 30 giây.",
+"Gọi cho 1 người bạn cũ lâu không liên lạc và hỏi thăm.",
+"Đọc 1 đoạn quảng cáo mỹ phẩm bằng giọng \"sến súa\" nhất có thể.",
+"Đứng dậy và nói lời cảm ơn tới người đã giúp bạn nhiều nhất trong năm nay.",
+"Thử làm biểu cảm ngạc nhiên như vừa trúng số.",
+"Kể 3 tật xấu của bản thân mà bạn muốn sửa.",
+"Nhại lại cách đi catwalk của người mẫu trên \"sàn diễn\" phòng khách.",
+"Gửi 1 sticker ngẫu nhiên cho người cuối cùng nhắn tin với bạn.",
+"Đứng dậy hát karaoke không lời 1 bài hát thiếu nhi.",
+"Thử vẽ chân dung người đối diện trong 1 phút bằng tay không thuận.",
+"Đọc 1 câu văn dài bằng giọng \"MC lồng tiếng phim\".",
+"Cho nhóm xem bức ảnh selfie xấu nhất trong điện thoại.",
+"Nhại lại 1 câu nói kinh điển trong phim Việt bạn nhớ.",
+"Thử làm 20 giây \"múa quạt\" bằng 2 tờ giấy.",
+"Kể 1 lời khen chân thành cho từng người trong nhóm.",
+"Đứng lên và diễn tả \"một ngày tồi tệ\" chỉ bằng hành động.",
+"Gọi cho ai đó và hỏi mượn 1 triệu đồng (chỉ đùa, nhớ nói rõ sau).",
+"Thử làm biểu cảm khi vừa bị \"unfriend\" bất ngờ.",
+"Đọc ngược tên đầy đủ của bạn thật nhanh 3 lần.",
+"Bắt chước cách một người nổi tiếng chụp ảnh tự sướng.",
+"Thử làm 1 đoạn beatbox ngắn dù không biết.",
+"Cho nhóm xem danh sách nhạc yêu thích và giải thích vì sao thích bài đầu tiên.",
+"Đứng dậy giả vờ đang thuyết trình về \"lý do vì sao nên ngủ nướng\".",
+"Nhại giọng đọc truyện cổ tích cho 1 câu chuyện hài do nhóm chọn.",
+"Thử làm mặt giận dữ rồi chuyển ngay sang mặt cười trong 3 giây.",
+"Gửi tin nhắn thoại nói \"Tớ yêu cả nhóm này\" cho group chat lớp.",
+"Đứng 1 phút giữ thăng bằng 1 cuốn sách trên đầu.",
+"Kể 1 điều bạn muốn nói với bản thân của 5 năm trước.",
+"Diễn tả cảm giác \"hết pin điện thoại giữa cuộc trò chuyện quan trọng\".",
+"Thử đi như người mẫu catwalk từ đầu phòng đến cuối phòng.",
+"Cho nhóm chọn 1 bài nhạc và bạn phải nhảy tự do theo nó trong 20 giây.",
+"Gọi cho 1 người và đọc 1 câu thơ tình ngẫu hứng bạn tự sáng tác.",
+"Thử làm biểu cảm \"khi mẹ gọi tên đầy đủ của bạn\".",
+"Đứng lên và nói lời xin lỗi (vui) tới đồ ăn bạn từng làm đổ.",
+"Nhại lại 1 câu thoại nổi tiếng trong phim hoạt hình tuổi thơ.",
+"Cho nhóm xem ảnh chụp màn hình gần nhất trong điện thoại.",
+"Thử làm 10 giây \"múa lửa\" tưởng tượng bằng tay không.",
+"Kể 1 câu chuyện hài hước xảy ra trong lớp học gần đây.",
+"Đứng dậy hát 1 đoạn nhạc chế do nhóm đặt lời ngay tại chỗ.",
+"Thử làm biểu cảm gương mặt của 5 con giáp khác nhau.",
+"Gọi video cho phụ huynh và khoe 1 \"thành tích\" hài hước ngẫu nhiên.",
+"Đứng yên để 1 người khác vẽ lên tay bạn bằng bút không xóa (hình dễ thương).",
+"Thử làm 1 đoạn nhảy shuffle dance cơ bản trong 15 giây.",
+"Kể tên 5 bộ phim bạn khóc khi xem.",
+"Đứng dậy diễn tả cảnh \"bị mẹ mắng vì dậy muộn\".",
+"Gửi lời chúc ngủ ngon dễ thương cho người cuối cùng nhắn tin bạn.",
+"Thử làm biểu cảm mặt khi vừa nhận được tin nhắn \"chúng ta nên nói chuyện\".",
+"Nhại lại cách 1 người bạn trong nhóm hay cười.",
+"Đứng dậy và hát 1 đoạn nhạc quảng cáo mì tôm/nước ngọt.",
+"Thử làm 1 câu đố vui và thách nhóm trả lời trong 10 giây.",
+"Kể 3 điều bạn biết ơn trong cuộc sống hiện tại.",
+"Đứng lên diễn tả cảm giác \"vừa nhận được điểm 10 bất ngờ\".",
+"Gọi cho 1 người bạn cũ và hát tặng họ 1 đoạn nhạc ngắn.",
+"Thử làm biểu cảm gương mặt khi đang \"để bụng đói đi chợ\".",
+"Đứng dậy và nhại lại cách con mèo/con chó ở nhà bạn hay làm.",
+"Kể 1 câu chuyện về lần bạn giúp đỡ người lạ.",
+"Thử làm 1 đoạn \"diễn thuyết\" ngắn về đề tài \"tại sao trà sữa là chân ái\".",
+"Đứng lên và cúi chào như đang nhận giải thưởng lớn.",
+"Gửi 1 tin nhắn động viên cho người bạn nghĩ đang cần nó nhất lúc này.",
+"Thử làm biểu cảm \"photo dạo\" tự nhiên nhất trong 5 giây để nhóm chụp lại.",
+"Đứng dậy diễn cảnh \"đi thi trễ giờ chạy vào lớp\".",
+"Nhại giọng đọc bản tin thời tiết cho căn phòng hiện tại.",
+"Kể 1 kỷ niệm đáng nhớ nhất với nhóm bạn này.",
+"Thử làm 10 giây nhảy giật lùi kiểu moonwalk.",
+"Đứng lên và đọc 1 lời cảm ơn ngắn tới chính bản thân mình.",
+"Gửi 1 GIF hài hước cho group chat lớp ngay bây giờ.",
+"Thử bắt chước dáng đi của người già trong 30 giây.",
+"Đứng dậy cúi đầu cảm ơn cả nhóm vì đã chơi cùng bạn hôm nay."
+];
+
+let mode = 'truth'; // truth | dare | random
+let currentType = 'truth';
+let flipped = false;
+let playedCount = 0;
+let usedTruth = [];
+let usedDare = [];
+
+const card = document.getElementById('card');
+const faceBack = document.getElementById('faceBack');
+const cardKind = document.getElementById('cardKind');
+const cardText = document.getElementById('cardText');
+const cardNumber = document.getElementById('cardNumber');
+const frontMark = document.getElementById('frontMark');
+const flipBtn = document.getElementById('flipBtn');
+const skipBtn = document.getElementById('skipBtn');
+const playedCountEl = document.getElementById('playedCount');
+const modeBtns = document.querySelectorAll('.mode-btn');
+
+function pickRandom(list, used){
+  if(used.length >= list.length){ used.length = 0; }
+  let idx;
+  do{ idx = Math.floor(Math.random()*list.length); } while(used.includes(idx));
+  used.push(idx);
+  return {text:list[idx], idx};
+}
+
+function setMode(m){
+  mode = m;
+  modeBtns.forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
+  frontMark.textContent = m==='truth' ? '😳' : m==='dare' ? '🔥' : '🎲';
+}
+
+function drawCard(){
+  let type = mode;
+  if(mode==='random'){ type = Math.random() < 0.5 ? 'truth' : 'dare'; }
+  currentType = type;
+  let result;
+  if(type==='truth'){
+    result = pickRandom(TRUTHS, usedTruth);
+    cardKind.textContent = 'THẬT 😳';
+    faceBack.classList.remove('dare-bg');
+    faceBack.classList.add('truth-bg');
+  } else {
+    result = pickRandom(DARES, usedDare);
+    cardKind.textContent = 'THÁCH 🔥';
+    faceBack.classList.remove('truth-bg');
+    faceBack.classList.add('dare-bg');
+  }
+  cardText.textContent = result.text;
+  cardNumber.textContent = '#' + (result.idx+1);
+}
+
+function flipCard(forceNew){
+  if(!flipped){
+    drawCard();
+    card.classList.add('flipped');
+    flipped = true;
+    playedCount++;
+    playedCountEl.textContent = 'Đã chơi: ' + playedCount;
+  } else if(forceNew){
+    // flip back then reveal a new one
+    card.classList.remove('flipped');
+    setTimeout(()=>{
+      drawCard();
+      card.classList.add('flipped');
+      playedCount++;
+      playedCountEl.textContent = 'Đã chơi: ' + playedCount;
+    }, 300);
+  } else {
+    card.classList.remove('flipped');
+    flipped = false;
+  }
+}
+
+flipBtn.addEventListener('click', ()=>{
+  if(!flipped){
+    flipCard(false);
+    flipBtn.textContent = '🔄 Thẻ mới';
+  } else {
+    flipCard(true);
+  }
+});
+
+card.addEventListener('click', ()=>{
+  if(!flipped){
+    flipCard(false);
+    flipBtn.textContent = '🔄 Thẻ mới';
+  }
+});
+
+skipBtn.addEventListener('click', ()=>{
+  card.classList.add('shake');
+  setTimeout(()=>card.classList.remove('shake'), 400);
+  if(flipped){
+    card.classList.remove('flipped');
+    setTimeout(()=>{
+      drawCard();
+      card.classList.add('flipped');
+    }, 300);
+  } else {
+    drawCard();
+  }
+});
+
+modeBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    setMode(btn.dataset.mode);
+    if(flipped){
+      card.classList.remove('flipped');
+      flipped = false;
+      flipBtn.textContent = '🎴 Lật thẻ';
+    }
+  });
+});
+
+setMode('truth');
+</script>
+</body>
+</html>
